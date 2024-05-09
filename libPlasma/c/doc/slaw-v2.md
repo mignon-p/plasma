@@ -170,7 +170,7 @@ ___________________________________________________________________
 The header oct is as described above.  If a list or map has 15 or more
 elements, the header oct is followed by another oct, which is simply a
 64-bit unsigned integer indicating the number of elements.
-Conceptually, conses follow the same pattern and lists or maps, but
+Conceptually, conses follow the same pattern as lists or maps, but
 since conses always have exactly two elements, they never need this
 extra oct.
 
