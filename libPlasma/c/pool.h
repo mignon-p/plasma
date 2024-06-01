@@ -605,7 +605,7 @@ OB_PLASMA_API ob_retort pool_deposit_ex (pool_hose ph, bprotein p, int64 *idx,
 //@}
 
 /**
- * Used an an argument to pool_fetch() to specify desired
+ * Used as an argument to pool_fetch() to specify desired
  * portions of a protein to fetch.
  */
 typedef struct pool_fetch_op
