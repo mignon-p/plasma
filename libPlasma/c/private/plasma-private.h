@@ -30,7 +30,7 @@ const void *slaw_numeric_nonarray_emit (bslaw s) OB_HIDDEN;
 //
 //
 
-slaw slaw_alloc (unt64 quadlen) OB_HIDDEN;
+slaw slaw_alloc (unt64 octlen) OB_HIDDEN;
 unt64 slaw_octlen (bslaw s) OB_HIDDEN;
 
 static inline OB_ALWAYS_INLINE void
