@@ -112,7 +112,9 @@ function(ObGeneratePC)
   STRING(REPLACE ";" " " PC_REQUIRES "${PC_REQUIRES}" )
   STRING(REPLACE ";" " " PC_REQUIRES.PRIVATE "${PC_REQUIRES.PRIVATE}" )
 
-  FILE(WRITE "${CMAKE_BINARY_DIR}/lib/pkgconfig/${PC_NAME}.pc"
+  set(PC_FILE_PATH "${CMAKE_BINARY_DIR}/lib/pkgconfig/${PC_NAME}.pc")
+
+  FILE(WRITE "${PC_FILE_PATH}"
 "prefix=${CMAKE_INSTALL_PREFIX}
 exec_prefix=\${prefix}
 libdir=\${prefix}/lib
@@ -129,5 +131,8 @@ Requires.private: ${PC_REQUIRES.PRIVATE}
 Libs.private: ${PC_LIBS.PRIVATE}
 Cflags.private: ${PC_CFLAGS.PRIVATE}
 ")
+
+  # Install the .pc file
+  install(FILES "${PC_FILE_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
 
 endfunction()
