@@ -33,7 +33,19 @@ transported and diffused.
 
 # building the thing
 
-Building Plasma requires
+## Docker and Make
+
+Platforms that can muster Docker and Make can do:
+
+    make
+
+Once built, you can open a shell into the built image with:
+
+    make shell
+
+The current repo is mounted to `/work` within the shell.
+
+Natively building Plasma requires
 
 - ninja
 - cmake
