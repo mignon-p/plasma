@@ -4,8 +4,6 @@ BUILDER_USER=plasma
 BUILDER_GROUP=animist
 OB_POOLS_DIR=/var/ob/pools
 
-echo "Before doing anything, PWD is $PWD"
-
 # If we are running docker natively, we want to create a user in the container
 # with the same UID and GID as the user on the host machine, so that any files
 # created are owned by that user. Without this they are all owned by root.
