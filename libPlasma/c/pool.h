@@ -733,6 +733,9 @@ OB_PLASMA_API ob_retort pool_prev (pool_hose ph, protein *ret_prot,
  * values.  On success (OB_OK), the hose's current index will be
  * 1 + *idx.  On failure (non-OB_OK), the hose's current index will
  * remain unchanged.
+ * \note \a search is matched against candidate proteins using
+ * protein_search().  Therefore, if \a search is a list, performs
+ * slaw_list_gapsearch().  Otherwise, performs slaw_list_find().
  */
 OB_PLASMA_API ob_retort pool_probe_frwd (pool_hose ph, bslaw search,
                                          protein *ret_prot,
