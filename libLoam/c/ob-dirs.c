@@ -589,6 +589,10 @@ ob_retort ob_search_path (const char *path, const char *filename,
   if (ob_is_explicit (filename))
     return do_callback (filename, func, vargies);
 
+  // avoid going into infinite loop on "while (*specp)" below!
+  if (path == NULL || path[0] == 0)
+    return OB_OK;
+
   size_t len = 2 + strlen (filename) + longest_component (path);
   char *scratch = (char *) malloc (len);
   if (!scratch)
