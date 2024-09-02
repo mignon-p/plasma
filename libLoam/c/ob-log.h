@@ -703,7 +703,7 @@ OB_LOAM_API bool ob_log_is_enabled (const char *file, ob_log_level *lvl,
 typedef void (*ob_abort_func_t) (void);
 
 /**
- * This function pointer is called what ob_log_fatal() is called with
+ * This function pointer is called when ob_log_fatal() is called with
  * an \a exitcode of -1.  For other exitcodes, ob_log_fatal() calls
  * exit(), which you can hook into with atexit().  Since atexit()
  * functions are not called by abort(), ob_abort_func provides a way
