@@ -31,6 +31,14 @@ refers not to the superheated & ionized intrastellar substance but rather to
 the liquid medium by which biological organisms' messaging molecules are
 transported and diffused.
 
+# Libraries in this repository
+
+![library dependency diagram](images/libraries.svg)
+
+**libLoam** is a library which contains basic portability and utility functions.  **libPlasma** is the library which implements slawx and pools, and is built on top of libLoam.
+
+Both loam and plasma consist of a core library written in C, and an optional library written in C++.  The C++ library provides a C++ interface to the C library, and in some cases also adds additional functionality.
+
 # building the thing
 
 ## Docker and Make Build

@@ -1,0 +1,225 @@
+<?xml version="1.0" standalone="no"?>
+<!-- Creator: fig2dev Version 3.2.7a -->
+<!-- Magnification: 1 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="685pt" height="532pt"
+	viewBox="899 599 11402 8852">
+<g fill="none">
+<!-- Line -->
+<rect x="900" y="600" width="11400" height="8850" fill="#ffffff"/>
+<!-- Ellipse -->
+<ellipse cx="2100" cy="4350" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<ellipse cx="2100" cy="3000" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<ellipse cx="11100" cy="1425" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<ellipse cx="11100" cy="5250" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<ellipse cx="11100" cy="6600" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<ellipse cx="10350" cy="8550" rx="900" ry="450" fill="#87cfff"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="3600" y="5400" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="7200" y="5400" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="3600" y="3150" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="7200" y="900" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="7200" y="3150" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<rect x="6450" y="8025" width="2400" height="1050" fill="#ffbfbf"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp0">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 8460,2958 8340,2958 8390,3161 8411,3161z"/>
+</clipPath>
+</defs>
+<polyline points=" 8400,1950 8400,3150" clip-path="url(#cp0)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 8400,3150 -->
+<polygon points=" 8340,2958 8400,3138 8460,2958 8340,2958"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp1">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 8460,5208 8340,5208 8390,5411 8411,5411z"/>
+</clipPath>
+</defs>
+<polyline points=" 8400,4200 8400,5400" clip-path="url(#cp1)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 8400,5400 -->
+<polygon points=" 8340,5208 8400,5388 8460,5208 8340,5208"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp2">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 4860,5208 4740,5208 4790,5411 4811,5411z"/>
+</clipPath>
+</defs>
+<polyline points=" 4800,4200 4800,5400" clip-path="url(#cp2)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 4800,5400 -->
+<polygon points=" 4740,5208 4800,5388 4860,5208 4740,5208"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp3">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 6192,3735 6192,3615 5990,3665 5990,3686z"/>
+</clipPath>
+</defs>
+<polyline points=" 7200,3675 6000,3675" clip-path="url(#cp3)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 6000,3675 -->
+<polygon points=" 6192,3615 6012,3675 6192,3735 6192,3615"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp4">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 6192,5985 6192,5865 5990,5915 5990,5936z"/>
+</clipPath>
+</defs>
+<polyline points=" 7200,5925 6000,5925" clip-path="url(#cp4)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 6000,5925 -->
+<polygon points=" 6192,5865 6012,5925 6192,5985 6192,5865"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp5">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 10082,6437 10010,6533 10202,6615 10215,6598z"/>
+</clipPath>
+</defs>
+<polyline points=" 9600,6150 10200,6600" clip-path="url(#cp5)"
+	stroke="#000000" stroke-width="15px" stroke-dasharray="40 40"/>
+<!-- Forward arrow to point 10200,6600 -->
+<polygon points=" 10010,6533 10190,6593 10082,6437 10010,6533"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp6">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 10010,5317 10082,5413 10215,5252 10202,5235z"/>
+</clipPath>
+</defs>
+<polyline points=" 9600,5700 10200,5250" clip-path="url(#cp6)"
+	stroke="#000000" stroke-width="15px" stroke-dasharray="40 40"/>
+<!-- Forward arrow to point 10200,5250 -->
+<polygon points=" 10082,5413 10190,5257 10010,5317 10082,5413"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp7">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 3118,3163 3190,3067 2998,2985 2985,3002z"/>
+</clipPath>
+</defs>
+<polyline points=" 3600,3450 3000,3000" clip-path="url(#cp7)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 3000,3000 -->
+<polygon points=" 3190,3067 3010,3007 3118,3163 3190,3067"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp8">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 3190,4283 3118,4187 2985,4348 2998,4365z"/>
+</clipPath>
+</defs>
+<polyline points=" 3600,3900 3000,4350" clip-path="url(#cp8)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 3000,4350 -->
+<polygon points=" 3118,4187 3010,4343 3190,4283 3118,4187"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp9">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 10008,1365 10008,1485 10211,1436 10211,1415z"/>
+</clipPath>
+</defs>
+<polyline points=" 9600,1425 10200,1425" clip-path="url(#cp9)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 10200,1425 -->
+<polygon points=" 10008,1485 10188,1425 10008,1365 10008,1485"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<polyline points=" 1500,7500 11700,7500"
+	stroke="#ff0000" stroke-width="30px"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp10">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 2958,8040 2958,8160 3161,8111 3161,8090z"/>
+</clipPath>
+</defs>
+<polyline points=" 1950,8100 3150,8100" clip-path="url(#cp10)"
+	stroke="#000000" stroke-width="15px"/>
+<!-- Forward arrow to point 3150,8100 -->
+<polygon points=" 2958,8160 3138,8100 2958,8040 2958,8160"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<defs>
+<clipPath id="cp11">
+	<path clip-rule="evenodd" d="M 899,599 H 12301 V 9451 H 899 z
+		M 2958,8940 2958,9060 3161,9011 3161,8990z"/>
+</clipPath>
+</defs>
+<polyline points=" 1950,9000 3150,9000" clip-path="url(#cp11)"
+	stroke="#000000" stroke-width="15px" stroke-dasharray="40 40"/>
+<!-- Forward arrow to point 3150,9000 -->
+<polygon points=" 2958,9060 3138,9000 2958,8940 2958,9060"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Text -->
+<text xml:space="preserve" x="4800" y="6000" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">libLoam/c</text>
+<!-- Text -->
+<text xml:space="preserve" x="8400" y="6000" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">libPlasma/c</text>
+<!-- Text -->
+<text xml:space="preserve" x="4800" y="3750" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">libLoam/c++</text>
+<!-- Text -->
+<text xml:space="preserve" x="8400" y="1500" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="204" text-anchor="middle">libPlasma/zeroconf</text>
+<!-- Text -->
+<text xml:space="preserve" x="2100" y="3075" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">ICU</text>
+<!-- Text -->
+<text xml:space="preserve" x="2100" y="4425" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">Boost</text>
+<!-- Text -->
+<text xml:space="preserve" x="11100" y="5325" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">OpenSSL</text>
+<!-- Text -->
+<text xml:space="preserve" x="11100" y="1500" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">Avahi</text>
+<!-- Text -->
+<text xml:space="preserve" x="8400" y="3750" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">libPlasma/c++</text>
+<!-- Text -->
+<text xml:space="preserve" x="11100" y="6675" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">libYaml</text>
+<!-- Text -->
+<text xml:space="preserve" x="3450" y="8175" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="204" text-anchor="start">dependency</text>
+<!-- Text -->
+<text xml:space="preserve" x="3450" y="9075" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="204" text-anchor="start">optional dependency</text>
+<!-- Text -->
+<text xml:space="preserve" x="7650" y="8625" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="228" text-anchor="middle">Zeugma library</text>
+<!-- Text -->
+<text xml:space="preserve" x="10350" y="8475" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="204" text-anchor="middle">external</text>
+<!-- Text -->
+<text xml:space="preserve" x="10350" y="8775" fill="#000000" font-family="sans-serif" font-style="normal" font-weight="bold" font-size="204" text-anchor="middle">library</text>
+</g>
+</svg>
