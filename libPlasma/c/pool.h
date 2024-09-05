@@ -412,8 +412,8 @@ OB_PLASMA_API ob_retort pool_advance_oldest (pool_hose ph, int64 idx_in);
  * either a protein or a slaw map, as in pool_create().
  *
  * The possible keys for the options map/protein are documented in
- * share/doc/g-speak/option-map-keys.html in the install tree,
- * or doc-non-dox/option-map-keys.html in the source tree.
+ * (FIXME: unknown?) in the install tree,
+ * or libPlasma/c/doc/pool-create-options.md in the source tree.
  */
 OB_PLASMA_API ob_retort pool_change_options (pool_hose ph, bslaw options);
 
