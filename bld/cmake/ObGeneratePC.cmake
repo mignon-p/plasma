@@ -132,7 +132,4 @@ Libs.private: ${PC_LIBS.PRIVATE}
 Cflags.private: ${PC_CFLAGS.PRIVATE}
 ")
 
-  # Install the .pc file
-  install(FILES "${PC_FILE_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
-
 endfunction()
