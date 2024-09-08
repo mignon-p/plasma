@@ -57,15 +57,15 @@ Natively building Plasma requires
 
 Use your package manager (brew, apt, yum, zypper, etc) to install them.
 
-To build on linux/intel mac, assuming you're in the same directory as
+To build on Linux/Intel MacOS, assuming you're in the same directory as
 this README:
 
 - `mkdir build`
 - `cd build`
-- `cmake -GNinja ..`
+- `cmake -GNinja -D CMAKE_INSTALL_PREFIX=/opt/plasma -D CMAKE_INSTALL_LIBDIR=/opt/plasma/lib ..`
 - `ninja`
 
-Building on arm macs is a bit more complicated:
+Building on Apple Silicon is a bit more complicated:
 
 - `brew install ninja cmake libyaml boost icu4c openssl`
 - `export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"`
