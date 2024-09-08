@@ -13,7 +13,7 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
 
     groupadd -o -g "$BUILDER_GID" "$BUILDER_GROUP" 2> /dev/null
     useradd -o -m -g "$BUILDER_GID" -u "$BUILDER_UID" -s /bin/bash "$BUILDER_USER" 2> /dev/null
-    adduser "$BUILDER_USER" sudo
+    usermod -aG sudo "$BUILDER_USER"
     export HOME=/home/${BUILDER_USER}
     shopt -s dotglob
     cp -r /etc/skel/* $HOME/
@@ -21,7 +21,7 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
     mkdir -p $OB_POOLS_DIR
     chown -R $BUILDER_UID:$BUILDER_GID $OB_POOLS_DIR
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-    cat <<-EOF >> ~/.profile
+    cat <<EOF >> ~/.profile
 
 PLASMA_INSTALL=$PLASMA_INSTALL
 # set PATH so it includes plasma, if it exists
@@ -29,7 +29,6 @@ if [ -d "$PLASMA_INSTALL/bin" ] ; then
     PATH="$PLASMA_INSTALL/bin:$PATH"
 fi
 EOF
-
 
     # Run the command as the specified user/group.
     if [[ "$@" == "$SHELL" ]]; then

@@ -33,19 +33,21 @@ transported and diffused.
 
 # building the thing
 
-## Docker and Make
+## Docker and Make Build
 
 Platforms that can muster Docker and Make can do:
 
-    make
+    make docker-build
 
 Once built, you can open a shell into the built image with:
 
     make shell
 
-The current repo is mounted to `/work` within the shell.
+This repo is mounted to `/work` within the shell. The plasma binaries are on the PATH (`p-list`, `p-create`, and friends).
 
-Natively building Plasma requires
+## CMake and Ninja Build
+
+Natively building Plasma requires these dependencies:
 
 - ninja
 - cmake
@@ -62,7 +64,7 @@ this README:
 
 - `mkdir build`
 - `cd build`
-- `cmake -GNinja -D CMAKE_INSTALL_PREFIX=/opt/plasma -D CMAKE_INSTALL_LIBDIR=/opt/plasma/lib ..`
+- `cmake -GNinja ..`
 - `ninja`
 
 Building on Apple Silicon is a bit more complicated:
@@ -91,3 +93,15 @@ two in the sequence above with the following:
 *N.B.*: it's not a problem to use the two overspecified compilation
 flags-exports foregoing with an Apple Silicon machine for which the
 simpler one would suffice.
+
+## Installing
+
+If you wish to install Plasma, you can specify the target install path with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To install to the directory `/opt/plasma`, follow these steps:
+
+```
+cd build
+cmake -GNinja -D CMAKE_INSTALL_PREFIX=/opt/plasma -D CMAKE_INSTALL_LIBDIR=/opt/plasma/lib ..
+sudo mkdir /opt/plasma
+sudo chown -R `id -u`:`id -g` /opt/plasma
+ninja install
+```
