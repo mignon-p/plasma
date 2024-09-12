@@ -78,7 +78,8 @@ OB_PLASMA_API ob_retort slaw_input_open (const char *filename, slaw_input *f);
  * \param[out]      s is the location that receives the newly allocated
  *                  slaw read from the file.
  *
- * \return          OB_OK if successful, or else another error code
+ * \return          OB_OK if successful, SLAW_END_OF_FILE if there are
+ *                  no more slawx in the file, or else another error code
  */
 OB_PLASMA_API ob_retort slaw_input_read (slaw_input f, slaw *s);
 

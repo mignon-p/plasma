@@ -47,7 +47,7 @@
  * and slaw-v2.txt for details of the two versions.
  *
  * The type is PLASMA_BINARY_FILE_TYPE_SLAW to indicate
- * that this is a slaw.  Additional types
+ * that this is a slaw file.  Additional types
  * could be allocated in the future if we need to have
  * binary files that contain something other than slawx
  * or proteins.
