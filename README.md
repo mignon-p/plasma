@@ -33,7 +33,21 @@ transported and diffused.
 
 # building the thing
 
-Building Plasma requires
+## Docker and Make Build
+
+Platforms that can muster Docker and Make can do:
+
+    make docker-build
+
+Once built, you can open a shell into the built image with:
+
+    make shell
+
+This repo is mounted to `/work` within the shell. The plasma binaries are on the PATH (`p-list`, `p-create`, and friends).
+
+## CMake and Ninja Build
+
+Natively building Plasma requires these dependencies:
 
 - ninja
 - cmake
@@ -45,7 +59,7 @@ Building Plasma requires
 
 Use your package manager (brew, apt, yum, zypper, etc) to install them.
 
-To build on linux/intel mac, assuming you're in the same directory as
+To build on Linux/Intel MacOS, assuming you're in the same directory as
 this README:
 
 - `mkdir build`
@@ -53,7 +67,7 @@ this README:
 - `cmake -GNinja ..`
 - `ninja`
 
-Building on arm macs is a bit more complicated:
+Building on Apple Silicon is a bit more complicated:
 
 - `brew install ninja cmake libyaml boost icu4c openssl`
 - `export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"`
@@ -79,3 +93,15 @@ two in the sequence above with the following:
 *N.B.*: it's not a problem to use the two overspecified compilation
 flags-exports foregoing with an Apple Silicon machine for which the
 simpler one would suffice.
+
+## Installing
+
+If you wish to install Plasma, you can specify the target install path with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To install to the directory `/opt/plasma`, follow these steps:
+
+```
+cd build
+cmake -GNinja -D CMAKE_INSTALL_PREFIX=/opt/plasma -D CMAKE_INSTALL_LIBDIR=/opt/plasma/lib ..
+sudo mkdir /opt/plasma
+sudo chown -R `id -u`:`id -g` /opt/plasma
+ninja install
+```
