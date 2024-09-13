@@ -20,21 +20,37 @@
 /**
  * \ingroup SlawBasicAPI
  */
+/** Protein is invalid/corrupt */
 #define SLAW_CORRUPT_PROTEIN -(OB_RETORTS_PLASMA_SLAW + 0)
+/** Slaw is invalid/corrupt */
 #define SLAW_CORRUPT_SLAW -(OB_RETORTS_PLASMA_SLAW + 1)
+/** Internal error (I think?) */
 #define SLAW_FABRICATOR_BADNESS -(OB_RETORTS_PLASMA_SLAW + 2)
+/** Attempted to coerce a non-numeric slaw to a number */
 #define SLAW_NOT_NUMERIC -(OB_RETORTS_PLASMA_SLAW + 3)
+/** Value is outside the range supported by the requested type */
 #define SLAW_RANGE_ERR -(OB_RETORTS_PLASMA_SLAW + 4)
+/** An unknown/unsupported slaw was encountered */
 #define SLAW_UNIDENTIFIED_SLAW -(OB_RETORTS_PLASMA_SLAW + 5)
+/** Incorrect length when coercing slaw to vector */
 #define SLAW_WRONG_LENGTH -(OB_RETORTS_PLASMA_SLAW + 6)
+/** Requested item was not found */
 #define SLAW_NOT_FOUND -(OB_RETORTS_PLASMA_SLAW + 7)
+/** YAML aliases are not allowed in slaw files */
 #define SLAW_ALIAS_NOT_SUPPORTED -(OB_RETORTS_PLASMA_IO + 0)
+/** Unexpected tag when parsing slaw from YAML file */
 #define SLAW_BAD_TAG -(OB_RETORTS_PLASMA_IO + 1)
+/** End of file was encountered */
 #define SLAW_END_OF_FILE -(OB_RETORTS_PLASMA_IO + 2)
+/** Error parsing slaw from YAML file */
 #define SLAW_PARSING_BADNESS -(OB_RETORTS_PLASMA_IO + 3)
+/** File does not seem to be a binary slaw file */
 #define SLAW_WRONG_FORMAT -(OB_RETORTS_PLASMA_IO + 4)
+/** Binary file is not a supported version */
 #define SLAW_WRONG_VERSION -(OB_RETORTS_PLASMA_IO + 5)
+/** File was not valid YAML */
 #define SLAW_YAML_ERR -(OB_RETORTS_PLASMA_IO + 6)
+/** libPlasma was built without YAML support */
 #define SLAW_NO_YAML -(OB_RETORTS_PLASMA_IO + 7)
 //@}
 

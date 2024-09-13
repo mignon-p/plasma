@@ -412,8 +412,8 @@ OB_PLASMA_API ob_retort pool_advance_oldest (pool_hose ph, int64 idx_in);
  * either a protein or a slaw map, as in pool_create().
  *
  * The possible keys for the options map/protein are documented in
- * share/doc/g-speak/option-map-keys.html in the install tree,
- * or doc-non-dox/option-map-keys.html in the source tree.
+ * (FIXME: unknown?) in the install tree,
+ * or libPlasma/c/doc/pool-create-options.md in the source tree.
  */
 OB_PLASMA_API ob_retort pool_change_options (pool_hose ph, bslaw options);
 
@@ -605,7 +605,7 @@ OB_PLASMA_API ob_retort pool_deposit_ex (pool_hose ph, bprotein p, int64 *idx,
 //@}
 
 /**
- * Used an an argument to pool_fetch() to specify desired
+ * Used as an argument to pool_fetch() to specify desired
  * portions of a protein to fetch.
  */
 typedef struct pool_fetch_op
@@ -733,6 +733,9 @@ OB_PLASMA_API ob_retort pool_prev (pool_hose ph, protein *ret_prot,
  * values.  On success (OB_OK), the hose's current index will be
  * 1 + *idx.  On failure (non-OB_OK), the hose's current index will
  * remain unchanged.
+ * \note \a search is matched against candidate proteins using
+ * protein_search().  Therefore, if \a search is a list, performs
+ * slaw_list_gapsearch().  Otherwise, performs slaw_list_find().
  */
 OB_PLASMA_API ob_retort pool_probe_frwd (pool_hose ph, bslaw search,
                                          protein *ret_prot,
