@@ -16,17 +16,8 @@
  *   thing to this, which is very minimal and ad-hoc, is a couple of
  *   functions at the end of libPlasma/c/pool_cmd.[ch].  They are mostly
  *   meant for use by plasma utilities, but could be called by other
- *   programs (since nearly all Oblong apps depend on libPlasma anyway),
- *   or could be used as a source of inspiration for writing additional
- *   functions.
- *
- * - A separate, C++-based logging facility exists in libBasement/Logger.h.
- *   It had once had some aspirations of being merged with this facility,
- *   but that has not yet happened.  (bug 817)
- *
- * - There were also once some aspirations that this long, header-file
- *   based documentation would move to some more appropriate Jeffy-provided
- *   location, where it would be more accessible to users of the SDK.
+ *   programs, or could be used as a source of inspiration for writing
+ *   additional functions.
  *
  * - The "begin usage" and "end usage" comments below are used by
  *   generate-ob-log-usage.hs to auto-generate the usage message in
