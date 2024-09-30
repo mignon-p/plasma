@@ -14,7 +14,7 @@
  * Although this is conceptually redundant with the hash tests in
  * LoamGTest.cpp, I take a different approach, so it adds further
  * coverage.  In particular, the LoamGTest hash tests test both Jenkins
- * and CityHash uses tests stolen from the Jenkins test suite.  This
+ * and CityHash using tests stolen from the Jenkins test suite.  This
  * file, on the other hand, tests both Jenkins and CityHash using tests
  * stolen from the CityHash test suite.
  *
