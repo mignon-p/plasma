@@ -194,6 +194,10 @@ OB_PLASMA_API ob_retort pool_exists_ctx (const char *pool_name,
  * Possible return values:
  *   - OB_OK if the name is just fine.
  *   - OB_POOLNAME_BADTH if the name is no good.
+ *
+ * \note This only validates a local pool name (or the "pool_name"
+ * or "path" component of a pool URI).  It will fail on remote
+ * pool names, such as "tcp://mango:10000/my_pool".
  */
 OB_PLASMA_API ob_retort pool_validate_name (const char *pool_name);
 
