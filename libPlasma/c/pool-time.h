@@ -23,8 +23,8 @@ typedef float64 pool_timestamp;
 
 /**
  * When seeking by time (i.e., positioning the pool's index pointing to
- * a proteining whose timestamp is close to a given timeout), when
- * have three possible strategies.
+ * a protein whose timestamp is close to a given timestamp), there
+ * are three possible strategies.
  */
 typedef enum {
   OB_CLOSEST = 0,   /**< Closest value, either above or below */
