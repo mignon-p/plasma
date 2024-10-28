@@ -2984,20 +2984,20 @@ typedef struct
 
 // names must be alphabetized, because we use bsearch()
 static const option_info pool_opts[] = {
-  {"auto-dispose", 'a', NEVER, RESIZABLE, POOL_FLAG_AUTO_DISPOSE},
-  {"checksum", 'c', RESIZABLE, NEVER, POOL_FLAG_CHECKSUM},
-  {"flock", 'l', RESIZABLE, NEVER, POOL_FLAG_FLOCK},
-  {"frozen", 'f', RESIZABLE, RESIZABLE, POOL_FLAG_FROZEN},
-  {"group", 0, ALWAYS, NEVER, 0},
-  {"index-capacity", 0, ALWAYS, NEVER, 0},
-  {"mode", 0, ALWAYS, NEVER, 0},
-  {"owner", 0, ALWAYS, NEVER, 0},
-  {"resizable", 0, ALWAYS, NEVER, 0},
-  {"single-file", 0, ALWAYS, NEVER, 0},
-  {"size", 0, ALWAYS, RESIZABLE, 0},
+  {"auto-dispose",   'a', NEVER,     RESIZABLE, POOL_FLAG_AUTO_DISPOSE},
+  {"checksum",       'c', RESIZABLE, NEVER,     POOL_FLAG_CHECKSUM},
+  {"flock",          'l', RESIZABLE, NEVER,     POOL_FLAG_FLOCK},
+  {"frozen",         'f', RESIZABLE, RESIZABLE, POOL_FLAG_FROZEN},
+  {"group",          0,   ALWAYS,    NEVER,     0},
+  {"index-capacity", 0,   ALWAYS,    NEVER,     0},
+  {"mode",           0,   ALWAYS,    NEVER,     0},
+  {"owner",          0,   ALWAYS,    NEVER,     0},
+  {"resizable",      0,   ALWAYS,    NEVER,     0},
+  {"single-file",    0,   ALWAYS,    NEVER,     0},
+  {"size",           0,   ALWAYS,    RESIZABLE, 0},
   {"stop-when-full", 's', RESIZABLE, RESIZABLE, POOL_FLAG_STOP_WHEN_FULL},
-  {"sync", 'S', RESIZABLE, RESIZABLE, POOL_FLAG_SYNC},
-  {"toc-capacity", 0, ALWAYS, NEVER, 0},
+  {"sync",           'S', RESIZABLE, RESIZABLE, POOL_FLAG_SYNC},
+  {"toc-capacity",   0,   ALWAYS,    NEVER,     0},
 };
 
 #define NUM_OPTIONS (sizeof (pool_opts) / sizeof (pool_opts[0]))
