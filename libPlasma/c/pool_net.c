@@ -1556,11 +1556,12 @@ void pool_net_multi_remove_awaiter (OB_UNUSED pool_hose ph)
 
 static slaw convert_fetch_op_to_slaw (pool_fetch_op ops)
 {
-  return slaw_map_inline_cf ("idx", slaw_int64 (ops.idx), "des",
-                             slaw_boolean (ops.want_descrips), "ing",
-                             slaw_boolean (ops.want_ingests), "roff",
-                             slaw_int64 (ops.rude_offset), "rbytes",
-                             slaw_int64 (ops.rude_length), NULL);
+  return slaw_map_inline_cf ("idx",    slaw_int64 (ops.idx),
+                             "des",    slaw_boolean (ops.want_descrips),
+                             "ing",    slaw_boolean (ops.want_ingests),
+                             "roff",   slaw_int64 (ops.rude_offset),
+                             "rbytes", slaw_int64 (ops.rude_length),
+                             NULL);
 }
 
 static slaw convert_fetch_ops_to_slaw (const pool_fetch_op *ops, int64 nops)

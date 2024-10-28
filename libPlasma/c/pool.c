@@ -791,10 +791,12 @@ static ob_retort pool_save_default_config_with_permissions (pool_hose ph,
   if (cf)
     OB_LOG_DEBUG_CODE (0x20101005, "writing sem-key %u\n", ph->sem_key);
   slaw m1 =
-    slaw_map_inline_cf ("type", slaw_string (reliable_type), "pool-version",
-                        slaw_int32 (ph->pool_directory_version), NULL);
-  slaw m2 = slaw_map_inline_cf ("sem-key", slaw_int32 (ph->sem_key), "perms",
-                                slaw_v3int32 (perms_v), NULL);
+    slaw_map_inline_cf ("type",         slaw_string (reliable_type),
+                        "pool-version", slaw_int32 (ph->pool_directory_version),
+                        NULL);
+  slaw m2 = slaw_map_inline_cf ("sem-key", slaw_int32 (ph->sem_key),
+                                "perms",   slaw_v3int32 (perms_v),
+                                NULL);
   slaw m = slaw_maps_merge (m1, (cf ? m2 : NULL), NULL);
   if (!m1 || !m2 || !m)
     return slaw_free (m1), slaw_free (m2), slaw_free (m), OB_NO_MEM;
@@ -1058,8 +1060,9 @@ ob_retort pool_get_info (pool_hose ph, int64 hops, protein *return_prot)
     return ph->info (ph, hops, return_prot);
 
   // else, fake it
-  slaw ingests = slaw_map_inline_cf ("type", slaw_string (ph->method),
-                                     "terminal", slaw_boolean (true), NULL);
+  slaw ingests = slaw_map_inline_cf ("type",     slaw_string (ph->method),
+                                     "terminal", slaw_boolean (true),
+                                     NULL);
   if (!ingests)
     return OB_NO_MEM;
   *return_prot = protein_from_ff (NULL, ingests);

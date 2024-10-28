@@ -1443,12 +1443,13 @@ static ob_retort pool_tcp_info (pool_hose ph, int64 hops, protein *return_prot)
       parsed_pseudo_uri *d = get_parsed_pseudo_uri (ph);
       int32 port = atoi (d->port_str);
       slaw ingests =
-        slaw_map_inline_cf ("type", slaw_string ("tcp"), "terminal",
-                            slaw_boolean (false), "host",
-                            slaw_string (d->hostname), "port",
-                            slaw_int32 (port), "net-pool-version",
-                            slaw_unt32 (ph->net->net_version), "slaw-version",
-                            slaw_unt32 (ph->net->slaw_version), NULL);
+        slaw_map_inline_cf ("type",             slaw_string ("tcp"),
+                            "terminal",         slaw_boolean (false),
+                            "host",             slaw_string (d->hostname),
+                            "port",             slaw_int32 (port),
+                            "net-pool-version", slaw_unt32 (ph->net->net_version),
+                            "slaw-version",     slaw_unt32 (ph->net->slaw_version),
+                            NULL);
       if (!ingests)
         return OB_NO_MEM;
       *return_prot = protein_from_ff (NULL, ingests);

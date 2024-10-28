@@ -3495,20 +3495,21 @@ ob_retort pool_mmap_info (pool_hose ph, int64 hops, protein *return_prot)
   const unt64 toc_count = pool_toc_count (d->ptoc);
   slaw flagslaw = map_from_flags (flags);
   slaw ingests =
-    slaw_map_inline_cf ("type", slaw_string ("mmap"), "terminal",
-                        slaw_boolean (true), "size",
-                        slaw_unt64 (get_file_size (d)), "size-used",
-                        slaw_unt64 (size_used), "mmap-pool-version",
-                        slaw_unt32 (get_mmap_version (d)), "slaw-version",
-                        slaw_unt32 (get_slaw_version (d)),
+    slaw_map_inline_cf ("type",           slaw_string ("mmap"),
+                        "terminal",       slaw_boolean (true),
+                        "size",           slaw_unt64 (get_file_size (d)),
+                        "size-used",      slaw_unt64 (size_used),
+                        "mmap-pool-version", slaw_unt32 (get_mmap_version (d)),
+                        "slaw-version", slaw_unt32 (get_slaw_version (d)),
                         // for backwards compatibility
                         "index-capacity", slaw_unt64 (toc_capacity),
-                        "index-step", slaw_unt64 (toc_step), "index-count",
-                        slaw_unt64 (toc_count),
+                        "index-step",     slaw_unt64 (toc_step),
+                        "index-count",    slaw_unt64 (toc_count),
                         // these new names are preferred
-                        "toc-capacity", slaw_unt64 (toc_capacity), "toc-step",
-                        slaw_unt64 (toc_step), "toc-count",
-                        slaw_unt64 (toc_count), NULL);
+                        "toc-capacity",   slaw_unt64 (toc_capacity),
+                        "toc-step",       slaw_unt64 (toc_step),
+                        "toc-count",      slaw_unt64 (toc_count),
+                        NULL);
   if (!ingests || !flagslaw)
     {
       slaw_free (ingests);
