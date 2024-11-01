@@ -201,8 +201,7 @@ OB_PLASMA_API ob_retort slaw_write_to_text_file (const char *filename, bslaw s);
  * - "comment", which takes a boolean, and defaults to true for the
  *   file-based functions, but false for the string-based functions.
  *   If true, starts the file with a comment which includes the g-speak
- *   and libYaml version numbers, and a mode comment to prevent emacs
- *   from going into idlwave-mode for files with a .pro extension.
+ *   and libYaml version numbers.
  * - "max-array-elements", which takes an int64, and defaults to -1.
  *   If not -1, arrays will be truncated after this many elements are
  *   printed.  This makes the file non-round-trippable.

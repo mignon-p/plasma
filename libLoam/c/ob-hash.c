@@ -33,7 +33,7 @@
 
 /* Original is from http://burtleburtle.net/bob/c/lookup3.c
  * This has been modified from the original to fit into libLoam more nicely.
- * In particilar, hashlittle() is now ob_jenkins_hash(), and
+ * In particular, hashlittle() is now ob_jenkins_hash(), and
  * hashlittle2() is now ob_jenkins_hash2(). */
 
 /*
