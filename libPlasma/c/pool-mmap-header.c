@@ -296,8 +296,9 @@ static protein make_mmap_config_protein (unt64 fsize, unt64 hsize,
                                          OB_UNUSED unt64 toc_cap)
 {
   slaw conf_b =
-    slaw_map_inline_cf (CFG_KEY_FILE_SIZE, slaw_unt64 (fsize),
-                        CFG_KEY_HEADER_SIZE, slaw_unt64 (hsize), NULL);
+    slaw_map_inline_cf (CFG_KEY_FILE_SIZE,   slaw_unt64 (fsize),
+                        CFG_KEY_HEADER_SIZE, slaw_unt64 (hsize),
+                        NULL);
   return conf_b ? protein_from_ff (NULL, conf_b) : NULL;
 }
 

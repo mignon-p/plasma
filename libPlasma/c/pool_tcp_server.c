@@ -388,15 +388,17 @@ static void convert_slaw_to_fetch_ops (bslaw s, pool_fetch_op *ops, int64 nops)
 static slaw convert_fetch_op_to_slaw (pool_fetch_op ops)
 {
   // XXX: make some of these conditional as described in pool-tcp-protocol.txt?
-  return slaw_map_inline_cf ("idx", slaw_int64 (ops.idx), "retort",
-                             slaw_int64 (ops.tort), "time",
-                             slaw_float64 (ops.ts), "tbytes",
-                             slaw_int64 (ops.total_bytes), "dbytes",
-                             slaw_int64 (ops.descrip_bytes), "ibytes",
-                             slaw_int64 (ops.ingest_bytes), "rbytes",
-                             slaw_int64 (ops.rude_bytes), "ndes",
-                             slaw_int64 (ops.num_descrips), "ning",
-                             slaw_int64 (ops.num_ingests), "prot", ops.p, NULL);
+  return slaw_map_inline_cf ("idx",    slaw_int64 (ops.idx),
+                             "retort", slaw_int64 (ops.tort),
+                             "time",   slaw_float64 (ops.ts),
+                             "tbytes", slaw_int64 (ops.total_bytes),
+                             "dbytes", slaw_int64 (ops.descrip_bytes),
+                             "ibytes", slaw_int64 (ops.ingest_bytes),
+                             "rbytes", slaw_int64 (ops.rude_bytes),
+                             "ndes",   slaw_int64 (ops.num_descrips),
+                             "ning",   slaw_int64 (ops.num_ingests),
+                             "prot",   ops.p,
+                             NULL);
 }
 
 static slaw convert_fetch_ops_to_slaw (const pool_fetch_op *ops, int64 nops)
