@@ -120,9 +120,20 @@ ob_retort ob_strptime (const char *s, float64 *seconds)
 
   struct tm fill;
   time_t tv;
-  strptime (datetime,
-            "%b " OB_STRFTIME_DAY_OF_MONTH_NO_LEADING_ZERO ", %Y %H:%M:%S",
-            &fill);
+
+  const char *ret =
+    strptime (datetime,
+              "%b " OB_STRFTIME_DAY_OF_MONTH_NO_LEADING_ZERO
+              ", %Y %H:%M:%S",
+              &fill);
+
+  if (ret == NULL)
+    {
+      free (s_cpy);
+      free (datetime);
+      return OB_PARSE_ERROR;
+    }
+
   fill.tm_isdst = -1; /* Not set by strptime.  Tells mktime() to check DST. */
   tv = mktime (&fill);
   free (s_cpy);

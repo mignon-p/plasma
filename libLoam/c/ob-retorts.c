@@ -79,6 +79,7 @@ const char *ob_error_string_literal (ob_retort err)
       E (OB_NOT_FOUND);
       E (OB_NOTHING_TO_DO);
       E (OB_OK);
+      E (OB_PARSE_ERROR);
       E (OB_STOP);
       E (OB_UNKNOWN_ERR);
       E (OB_VERSION_MISMATCH);

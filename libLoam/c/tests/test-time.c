@@ -44,14 +44,14 @@ typedef struct for_a_bad_time_call
 
 static const for_a_bad_time_call bad_times[] =
   {
-    { "Dec 32, 2024 13:30:53.63"    , OB_UNKNOWN_ERR },
-    { "Dec 20, 2024 25:30:53.63"    , OB_UNKNOWN_ERR },
-    { "Dec 20, 2024 13:30:xx.63"    , OB_UNKNOWN_ERR },
-    { "Dec 20, 2024 13:30:53.xx"    , OB_UNKNOWN_ERR },
-    { "Dec 20, 867-5309 13:30:53.63", OB_UNKNOWN_ERR },
-    { "Blob 20, 2024 13:30:53.63"   , OB_UNKNOWN_ERR },
-    { ".63"                         , OB_UNKNOWN_ERR },
-    { ""                            , OB_UNKNOWN_ERR },
+    { "Dec 32, 2024 13:30:53.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 25:30:53.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 13:30:xx.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 13:30:53.xx"    , OB_PARSE_ERROR },
+    { "Dec 20, 867-5309 13:30:53.63", OB_PARSE_ERROR },
+    { "Blob 20, 2024 13:30:53.63"   , OB_PARSE_ERROR },
+    { ".63"                         , OB_PARSE_ERROR },
+    { ""                            , OB_PARSE_ERROR },
   };
 
 /* oddly, ob_format_time outputs a single trailing space. */
