@@ -52,6 +52,10 @@ OB_LOAM_API ob_retort ob_micro_sleep (unt32 micro_seconds);
  * plus one byte for a nul terminator, plus one extra byte needed
  * internally, or the result is undefined.
  * 80 bytes is a safe output buffer size.
+ *
+ * \note Although \a tv is in UTC, the string representation
+ * is in local time.  Therefore, the current time zone is used
+ * implicitly.
  */
 OB_LOAM_API void ob_format_time (char *buf, size_t bufsiz,
                                  const struct timeval *tv);
@@ -59,6 +63,10 @@ OB_LOAM_API void ob_format_time (char *buf, size_t bufsiz,
 /**
  * Format the time, specified by \a seconds since Epoch Time, as a string
  * into \a buf (of length \a bufsiz).
+ *
+ * \note Although \a seconds is in UTC, the string representation
+ * is in local time.  Therefore, the current time zone is used
+ * implicitly.
  */
 OB_LOAM_API void ob_format_time_f (char *buf, size_t bufsiz,
                                    const float64 seconds);
@@ -74,6 +82,10 @@ OB_LOAM_API void ob_format_time_f (char *buf, size_t bufsiz,
  *     ob_format_time_f (ctime, sizeof (ctime), cur_time);
  *     ob_strptime (ctime, &echo_time);
  *     EXPECT_LT (cur_time - echo_time, 0.01);
+ *
+ * \note Although \a seconds is in UTC, the string representation
+ * is in local time.  Therefore, the current time zone is used
+ * implicitly.
  */
 OB_LOAM_API ob_retort ob_strptime (const char *s, float64 *seconds);
 
