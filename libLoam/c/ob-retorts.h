@@ -275,6 +275,11 @@ typedef int64 ob_retort;
 /** Illegal mixing of different versions of g-speak headers and shared libs. */
 #define OB_VERSION_MISMATCH OB_CONST_RETORT (-261)
 
+/**
+ * Unable to parse the given string.
+ */
+#define OB_PARSE_ERROR OB_CONST_RETORT (-270)
+
 // >>> add new error codes here <<<
 
 // success codes

@@ -8,10 +8,12 @@
 #include "libLoam/c/ob-time.h"
 #include "libLoam/c/ob-sys.h"
 #include "libLoam/c/ob-log.h"
+#include "libLoam/c/ob-util.h"
 
 #include <time.h>
 #include <stdio.h>
 #include <math.h>
+#include <ctype.h>
 
 #ifdef __APPLE__
 #include <mach/mach_time.h>
@@ -93,40 +95,41 @@ void ob_format_time_f (char *buf, size_t bufsize, const float64 seconds)
 
 ob_retort ob_strptime (const char *s, float64 *seconds)
 {
-  if (!s)
-    return OB_INVALID_ARGUMENT;
+  if (s == NULL || seconds == NULL)
+    return OB_ARGUMENT_WAS_NULL;
 
-  // since strptime (struct tm) does not support milliseconds, we must split
-  // the string into datetime and milliseconds
-  char *s_cpy = (char *) malloc (strlen (s) + 1);
-  strcpy (s_cpy, s);
-  char *delim;
-  size_t d_len, s_len = strlen (s) + 1;
-  for (d_len = 0, delim = s_cpy; d_len < s_len; d_len++, delim++)
-    {
-      if (delim[0] == '.')
-        break;
-    }
-
-  if (d_len == 0)
-    {
-      free (s_cpy);
-      return OB_INVALID_ARGUMENT;
-    }
-
-  char *datetime = (char *) malloc (d_len + 1);
-  strncpy (datetime, s_cpy, d_len);
-  float64 ms = atof (s_cpy + d_len);  // atof handily return 0.0 on error
+  const char *fmt =
+    "%b " OB_STRFTIME_DAY_OF_MONTH_NO_LEADING_ZERO ", %Y %H:%M:%S";
 
   struct tm fill;
-  time_t tv;
-  strptime (datetime,
-            "%b " OB_STRFTIME_DAY_OF_MONTH_NO_LEADING_ZERO ", %Y %H:%M:%S",
-            &fill);
+  OB_CLEAR (fill);
+
+  /* Parse the date and time up to the decimal point.
+   * (strptime only parses a whole number of seconds) */
+  char *endptr = strptime (s, fmt, &fill);
+  if (endptr == NULL)
+    return OB_PARSE_ERROR;
+
+  float64 ms = 0.0;
+
+  /* Parse the fractional number of seconds, if any. */
+  if (*endptr == '.')
+    ms = strtod (endptr, &endptr);
+
+  if (endptr == NULL)
+    return OB_PARSE_ERROR;
+
+  /* Allow trailing whitespace */
+  while (isspace (*endptr))
+    endptr++;
+
+  /* If there is anything left over other than whitespace,
+   * call it an error. */
+  if (*endptr != 0)
+    return OB_PARSE_ERROR;
+
   fill.tm_isdst = -1; /* Not set by strptime.  Tells mktime() to check DST. */
-  tv = mktime (&fill);
-  free (s_cpy);
-  free (datetime);
+  time_t tv = mktime (&fill);
 
   if (tv == -1)
     return ob_errno_to_retort (errno);

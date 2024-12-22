@@ -7,15 +7,57 @@
 #include "libLoam/c/ob-time.h"
 #include "libLoam/c/ob-util.h"
 #include "libLoam/c/ob-log.h"
+#include "libLoam/c/ob-retorts.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
+
+static int num_failures = 0;
+
+typedef struct for_a_good_time_call
+{
+  char good_time[32];
+  char expected[32];
+} for_a_good_time_call;
+
+static const for_a_good_time_call good_times[] =
+  {
+    { "Dec 20, 2024 13:30:53.63 "   , "Dec 20, 2024 13:30:53.63 "    },
+    { "Dec 20, 2024 13:30:53.63"    , "Dec 20, 2024 13:30:53.63 "    },
+    { "Dec 20, 2024 13:30:53.631 "  , "Dec 20, 2024 13:30:53.63 "    },
+    { "Dec 20, 2024 13:30:53.631"   , "Dec 20, 2024 13:30:53.63 "    },
+    { "Dec 20, 2024 13:30:53.50 "   , "Dec 20, 2024 13:30:53.50 "    },
+    { "Dec 20, 2024 13:30:53.50"    , "Dec 20, 2024 13:30:53.50 "    },
+    { "Dec 20, 2024 13:30:53.5 "    , "Dec 20, 2024 13:30:53.50 "    },
+    { "Dec 20, 2024 13:30:53.5"     , "Dec 20, 2024 13:30:53.50 "    },
+    { "Dec 20, 2024 13:30:53 "      , "Dec 20, 2024 13:30:53.00 "    },
+    { "Dec 20, 2024 13:30:53"       , "Dec 20, 2024 13:30:53.00 "    },
+  };
+
+typedef struct for_a_bad_time_call
+{
+  char      bad_time[32];
+  ob_retort expected;
+} for_a_bad_time_call;
+
+static const for_a_bad_time_call bad_times[] =
+  {
+    { "Dec 32, 2024 13:30:53.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 25:30:53.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 13:30:xx.63"    , OB_PARSE_ERROR },
+    { "Dec 20, 2024 13:30:53.xx"    , OB_PARSE_ERROR },
+    { "Dec 20, 867-5309 13:30:53.63", OB_PARSE_ERROR },
+    { "Blob 20, 2024 13:30:53.63"   , OB_PARSE_ERROR },
+    { ".63"                         , OB_PARSE_ERROR },
+    { ""                            , OB_PARSE_ERROR },
+  };
 
 /* oddly, ob_format_time outputs a single trailing space. */
 static const char beg_of_time_s[] = "Jan 1, 1970 00:00:00.00 ";
-static float64 beg_of_time_sec = 0.0;
-struct timeval beg_of_time_tv (void)
+static const float64 beg_of_time_sec = 0.0;
+static struct timeval beg_of_time_tv (void)
 {
   struct timeval tv;
   tv.tv_sec = 0;
@@ -24,8 +66,8 @@ struct timeval beg_of_time_tv (void)
 }
 
 static const char rand_test_time_s[] = "Oct 31, 2016 16:20:42.09 ";
-static float64 rand_test_time_sec = 1477930842.099525;
-struct timeval rand_test_time_tv (void)
+static const float64 rand_test_time_sec = 1477930842.099525;
+static struct timeval rand_test_time_tv (void)
 {
   struct timeval tv;
   tv.tv_sec = 1477930842;
@@ -126,6 +168,27 @@ static void test_ob_format_time_f (void)
                 buf, expected_len);
 }
 
+static void print_passfail (bool good)
+{
+  if (good)
+    {
+      printf ("\033[32m\342\234\224\033[0m");
+    }
+  else
+    {
+      printf ("\033[91m\360\237\227\264\033[0m");
+      num_failures++;
+    }
+}
+
+static void print_test_string (const char *str)
+{
+  char buf[80];
+
+  snprintf (buf, sizeof (buf), "\"%.75s\"", str);
+  printf ("%-30s -> ", buf);
+}
+
 static void test_ob_strptime (void)
 {
   char ctime1[80];
@@ -137,8 +200,51 @@ static void test_ob_strptime (void)
 
   OB_DIE_ON_ERROR (ob_strptime (ctime1, &echo_time));
 
-  if ((cur_time - echo_time) > 0.01)
+  if (fabs (cur_time - echo_time) > 0.01)
     error_exit ("test_ob_strptime: %f != %f\n", cur_time, echo_time);
+
+  /* Test whether some known-good strings round-trip as expected */
+  size_t i;
+
+  for (i = 0; i < sizeof (good_times) / sizeof (good_times[0]); i++)
+    {
+      float64     secs = -1.0;
+      const char *good = good_times[i].good_time;
+
+      print_test_string (good);
+      ob_retort   tort = ob_strptime (good, &secs);
+
+      if (tort == OB_OK)
+        {
+          char buf[80];
+
+          ob_format_time_f (buf, sizeof (buf), secs);
+
+          print_passfail (0 == strcmp (buf, good_times[i].expected));
+          printf (" \"%s\"\n", buf);
+        }
+      else
+        {
+          const char *msg  = ob_error_string (tort);
+          print_passfail (false);
+          printf (" %s\n", msg);
+        }
+    }
+
+  /* Test whether some known-bad strings fail as expected */
+  for (i = 0; i < sizeof (bad_times) / sizeof (bad_times[0]); i++)
+    {
+      float64     secs = -1.0;
+      const char *bad  = bad_times[i].bad_time;
+
+      print_test_string (bad);
+
+      ob_retort   tort = ob_strptime (bad, &secs);
+      print_passfail (tort == bad_times[i].expected);
+
+      const char *msg  = ob_error_string (tort);
+      printf (" %s\n", msg);
+    }
 }
 
 int main (int argc, char **argv)
@@ -151,5 +257,5 @@ int main (int argc, char **argv)
   test_ob_format_time_f ();
   test_ob_strptime ();
 
-  return EXIT_SUCCESS;
+  return num_failures;
 }
