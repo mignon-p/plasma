@@ -2091,15 +2091,46 @@ static void format_to_slabu (void *v, const char *fmt, ...)
   va_end (vargs);
 }
 
+/* ovew_struct ("overview struct") is the cookie passed to slaw_walk()
+ * when rendering a numeric slaw's value as a human-readable string
+ * for the slaw_spew_overview() family of functions.  slaw_walk()
+ * calls the ovew_* callbacks registered in ovew_handler, which use
+ * this struct to emit formatted text and track separator state across
+ * nested numeric contexts (array, vector, complex).
+ *
+ * Separator logic (managed by ovew_sep()):
+ *   - The first element in any context emits no separator.
+ *   - Subsequent array elements are separated by " ; ".
+ *   - Subsequent vector components are separated by ", ".
+ *   - The imaginary part of a complex number is separated by " + j".
+ *
+ * Context switching:
+ *   - ovew_vector_begin() redirects inc to v (", " separators) and
+ *     ovew_vector_end() restores it to a (" ; " separators).
+ *   - ovew_complex_begin() saves the current inc in csave, then redirects
+ *     inc to c (" + j" separator); ovew_complex_end() restores inc from
+ *     csave.
+ *
+ * Example output for an array of two 2-D complex-float vectors:
+ *   VFLOAT32C/A(2) = [(1.0 + j2.0, 3.0 + j4.0) ; (5.0 + j6.0, 7.0 + j8.0)]
+ */
 typedef struct ovew_struct
 {
-  void *whither;
-  fwfunc func;
-  int64 *inc;
-  int64 *csave;
-  int64 c;
-  int64 v;
-  int64 a;
+  void *whither;  /* output destination: FILE * or slabu *, passed
+                   * to func */
+  fwfunc func;    /* formatting function: format_to_file or
+                   * format_to_slabu */
+  int64 *inc;     /* points to whichever counter is active (c, v, or a),
+                   * determining the separator and element count for the
+                   * current nesting level */
+  int64 *csave;   /* saved inc from before entering a complex context,
+                   * restored by ovew_complex_end() */
+  int64 c;        /* element count within the current complex number
+                   * (0 = real part, 1 = imaginary part) */
+  int64 v;        /* element count within the current vector
+                   * (0 = first component, 1+ = subsequent components) */
+  int64 a;        /* element count at the array (outermost) level
+                   * (0 = first element, 1+ = subsequent elements) */
 } ovew_struct;
 
 static const char *ovew_sep (ovew_struct *vw)
