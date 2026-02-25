@@ -1016,6 +1016,24 @@ OB_PLASMA_API void slaw_spew_overview_to_stderr (bslaw s);
  * given slaw, as would be printed by slaw_spew_overview_to_stderr().
  */
 OB_PLASMA_API slaw slaw_spew_overview_to_string (bslaw s);
+
+/**
+ * Same as slaw_spew_overview_to_string(), but with two additional
+ * arguments.
+ *
+ * If \a rel_off is true, annotates subslawx with their byte offset
+ * relative to the top-level slaw that was passed to this function.
+ * If false, annotates subslawx with their absolute pointer address
+ * in memory.  (False is the default used by the other slaw_spew
+ * functions.)
+ *
+ * If \a prolo is non-NULL, then every line of the spew is
+ * prefixed with \a prolo.  (NULL is the default used by the
+ * slaw_spew functions that don't take a \a prolo argument.)
+ */
+OB_PLASMA_API slaw slaw_spew_overview_to_string_ex (bslaw       s,
+                                                    bool        rel_off,
+                                                    const char *prolo);
 //@}
 
 #ifdef __cplusplus

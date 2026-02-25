@@ -2305,10 +2305,27 @@ static void slaw_spew_numeric_ovewview (bslaw s, fwfunc func, void *whither)
   slaw_walk (&vw, &ovew_handler, s);
 }
 
+typedef struct slaw_spew_cfg
+{
+  bool  use_relative_offset;
+  bslaw start;
+  int   num_digits;
+} slaw_spew_cfg;
 
+static unt64 slaw_spew_diff (bslaw start, bslaw here)
+{
+  const unt8 *p1   = (const unt8 *) start;
+  const unt8 *p2   = (const unt8 *) here;
+  ptrdiff_t   diff = p2 - p1;
 
-static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
-                                const char *prolo)
+  return (unt64) diff;
+}
+
+static void slaw_spew_internal (bslaw                s,
+                                fwfunc               func,
+                                void                *whither,
+                                const char          *prolo,
+                                const slaw_spew_cfg *cfg)
 {
   if (!prolo)
     prolo = "";
@@ -2317,7 +2334,16 @@ static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
       _FW ("%s[no slaw -- NULL]", prolo);
       return;
     }
-  _FW ("%sslaw[%" OB_FMT_64 "uo.%p]: ", prolo, slaw_octlen (s), s);
+  if (cfg && cfg->use_relative_offset)
+    {
+      unt64 offset = slaw_spew_diff (cfg->start, s);
+      _FW ("%sslaw[%" OB_FMT_64 "uo.0x%0*" OB_FMT_64 "x]: ",
+           prolo, slaw_octlen (s), cfg->num_digits, offset);
+    }
+  else
+    {
+      _FW ("%sslaw[%" OB_FMT_64 "uo.%p]: ", prolo, slaw_octlen (s), s);
+    }
   if (slaw_is_string (s))
     {
       _FW ("STR(%" OB_FMT_64 "d): \"%s\"", slaw_string_emit_length (s),
@@ -2330,10 +2356,10 @@ static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
       strcpy (down, prolo);
       strcpy (down + l, " L: ");
       _FW ("CONS:\n");
-      slaw_spew_internal (slaw_cons_emit_car (s), func, whither, down);
+      slaw_spew_internal (slaw_cons_emit_car (s), func, whither, down, cfg);
       *(down + l + 1) = 'R';
       _FW ("\n");
-      slaw_spew_internal (slaw_cons_emit_cdr (s), func, whither, down);
+      slaw_spew_internal (slaw_cons_emit_cdr (s), func, whither, down, cfg);
       free (down);
     }
   else if (slaw_is_numeric (s))
@@ -2353,7 +2379,7 @@ static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
         {
           _FW ("\n");
           snprintf (prefix + l, extra, " %" OB_FMT_64 "u: ", q);
-          slaw_spew_internal (ess, func, whither, prefix);
+          slaw_spew_internal (ess, func, whither, prefix, cfg);
         }
       free (prefix);
       _FW ("\n%s }", prolo);
@@ -2372,13 +2398,13 @@ static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
       if (descrips)
         {
           _FW ("%sdescrips:\n", prolo);
-          slaw_spew_internal (descrips, func, whither, prolo);
+          slaw_spew_internal (descrips, func, whither, prolo, cfg);
           _FW ("\n");
         }
       if (ingests)
         {
           _FW ("%singests:\n", prolo);
-          slaw_spew_internal (ingests, func, whither, prolo);
+          slaw_spew_internal (ingests, func, whither, prolo, cfg);
           _FW ("\n");
         }
       if (rudeLen > 0)
@@ -2407,7 +2433,7 @@ static void slaw_spew_internal (bslaw s, fwfunc func, void *whither,
 
 void slaw_spew_overview (bslaw s, FILE *whither, const char *prolo)
 {
-  slaw_spew_internal (s, format_to_file, (void *) whither, prolo);
+  slaw_spew_internal (s, format_to_file, (void *) whither, prolo, NULL);
 }
 
 void slaw_spew_overview_to_stderr (bslaw s)
@@ -2415,13 +2441,36 @@ void slaw_spew_overview_to_stderr (bslaw s)
   slaw_spew_overview (s, stderr, NULL);
 }
 
-slaw slaw_spew_overview_to_string (bslaw s)
+slaw slaw_spew_overview_to_string_ex (bslaw       s,
+                                      bool        use_relative_offset,
+                                      const char *prolo)
 {
   slabu *sb = slabu_new ();
   if (!sb)
     return NULL;
-  slaw_spew_internal (s, format_to_slabu, (void *) sb, NULL);
+
+  slaw_spew_cfg cfg;
+  OB_CLEAR(cfg);
+  cfg.use_relative_offset = use_relative_offset;
+  cfg.start               = s;
+
+  if (use_relative_offset)
+    {
+      char buf[24];
+      int64 len = slaw_len (s) - 1;
+      if (len < 1)
+        len = 1;
+      snprintf (buf, sizeof (buf), "%" OB_FMT_64 "x", len);
+      cfg.num_digits = strlen (buf);
+    }
+
+  slaw_spew_internal (s, format_to_slabu, (void *) sb, prolo, &cfg);
   return slaw_strings_join_slabu_f (sb, NULL);
+}
+
+slaw slaw_spew_overview_to_string (bslaw s)
+{
+  return slaw_spew_overview_to_string_ex (s, false, NULL);
 }
 
 
