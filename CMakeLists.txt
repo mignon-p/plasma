@@ -127,7 +127,9 @@ endif()
 # are absent and the user hasn't explicitly requested C++ libs.
 set(Boost_USE_DEBUG_RUNTIME FALSE)
 set(BOOST_ROOT ${YOBUILD})
-cmake_policy(SET CMP0167 NEW)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+  cmake_policy(SET CMP0167 NEW)
+endif()
 find_package(Boost QUIET COMPONENTS filesystem regex)
 # ICU is not found via find_package here to avoid overwriting ICU_LIBRARIES
 # with absolute paths that cause trouble in .pc files; use find_library just
