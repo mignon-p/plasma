@@ -525,7 +525,7 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V)
 function(add_wrapped_test _myTest _myTestRunner _myFixtures)
   add_test(
     NAME ${_myTest}
-    COMMAND "${SHELL}" ${g-speak_BINARY_DIR}/yotest run "${_myFixtures}" ${_myTestRunner}
+    COMMAND ${g-speak_BINARY_DIR}/yotest run "${_myFixtures}" ${_myTestRunner}
   )
 endfunction()
 
