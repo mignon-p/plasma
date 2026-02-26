@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.6.2)
+cmake_minimum_required (VERSION 3.10...4.2)
 
 project(g-speak CXX C)
 
@@ -127,6 +127,7 @@ endif()
 # are absent and the user hasn't explicitly requested C++ libs.
 set(Boost_USE_DEBUG_RUNTIME FALSE)
 set(BOOST_ROOT ${YOBUILD})
+cmake_policy(SET CMP0167 NEW)
 find_package(Boost QUIET COMPONENTS filesystem regex)
 # ICU is not found via find_package here to avoid overwriting ICU_LIBRARIES
 # with absolute paths that cause trouble in .pc files; use find_library just

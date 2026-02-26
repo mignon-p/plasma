@@ -1,6 +1,6 @@
 # /* (c) 2010 Oblong Industries */
 
-cmake_minimum_required(VERSION 3.6.2)
+cmake_minimum_required(VERSION 3.10...4.2)
 project(Plasma)
 
 # Avoid cmake warnings on Mac
