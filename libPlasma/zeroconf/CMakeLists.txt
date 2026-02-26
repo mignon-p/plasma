@@ -89,12 +89,12 @@ install (
 
 install (
   FILES ${PlasmaZeroconf_HEADERS}
-  DESTINATION "include/libPlasma/zeroconf"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libPlasma/zeroconf"
 )
 
 install (
   TARGETS PlasmaZeroconf ${PlasmaZeroconf_PROGRAMS}
-  RUNTIME DESTINATION "bin"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
@@ -102,7 +102,7 @@ install (
 if (MSVC)
   install(
     FILES ${PlasmaZeroconf_BINARY_DIR}/${BIN_SUBDIR}/PlasmaZeroconf.pdb
-    DESTINATION "bin"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     CONFIGURATIONS Debug RelWithDebInfo
   )
 endif()

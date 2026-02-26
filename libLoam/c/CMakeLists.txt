@@ -171,19 +171,19 @@ install (
 
 install (
   FILES ${Loam_HEADERS}
-  DESTINATION "include/libLoam/c"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libLoam/c"
 )
 
 if (WIN32)
   install (
     FILES win32/ob-pthread-win32.h win32/ob-sys-win32.h
-    DESTINATION "include/libLoam/c/win32"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libLoam/c/win32"
   )
 endif()
 
 install (
   TARGETS Loam ${Loam_PROGRAMS}
-  RUNTIME DESTINATION "bin"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
@@ -191,7 +191,7 @@ install (
 if (MSVC)
   install(
     FILES ${Loam_BINARY_DIR}/${BIN_SUBDIR}/Loam.pdb
-    DESTINATION "bin"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     CONFIGURATIONS Debug RelWithDebInfo
   )
 endif()

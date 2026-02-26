@@ -74,17 +74,17 @@ install (
 
 install (
   FILES ${Plasma++_HEADERS}
-  DESTINATION "include/libPlasma/c++"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libPlasma/c++"
 )
 
 install (
   FILES ${Staging_Plasma++_HEADERS}
-  DESTINATION "include/libStaging/libPlasma/c++"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libStaging/libPlasma/c++"
 )
 
 install (
   TARGETS Plasma++
-  RUNTIME DESTINATION "bin"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
@@ -92,7 +92,7 @@ install (
 if (MSVC)
   install(
     FILES ${Plasma++_BINARY_DIR}/${BIN_SUBDIR}/Plasma++.pdb
-    DESTINATION "bin"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     CONFIGURATIONS Debug RelWithDebInfo
   )
 endif()

@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.6.2)
 
 project(g-speak CXX C)
 
+include(GNUInstallDirs)
+
 # Compatibility options
 option(PLASMA_LEGACY_MODE "Build for compatibility with older systems" OFF)
 option(PLASMA_ENABLE_TCP_OPTIMIZATIONS "Enable TCP performance optimizations" ON)
@@ -454,10 +456,10 @@ MACRO(pod2manhtml _sourcefile _manext)
         COMMAND ${indexcmd} -o ${_doc_bindir}/index.html ${_doc_bindir}/htmlman/*-man.html
         VERBATIM
     )
-    INSTALL(FILES ${doc_bindir}/htmlman/${_outhtml} DESTINATION share/doc/${PRODNAME}/htmlman )
-    INSTALL(FILES ${doc_bindir}/${_outman}          DESTINATION share/man/man${_manext} )
+    INSTALL(FILES ${doc_bindir}/htmlman/${_outhtml} DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${PRODNAME}/htmlman" )
+    INSTALL(FILES ${doc_bindir}/${_outman}          DESTINATION "${CMAKE_INSTALL_MANDIR}/man${_manext}" )
 ENDMACRO(pod2manhtml)
-INSTALL(FILES ${doc_bindir}/index.html DESTINATION share/doc/${PRODNAME} )
+INSTALL(FILES ${doc_bindir}/index.html DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${PRODNAME}" )
 
 #------------- test support ---------------
 
@@ -656,7 +658,7 @@ if (ASAN OR (UNIX AND NOT APPLE))
   # Install unconditionally on Linux because conditional debian packaging is... hard.
   install(
     FILES bld/cmake/asanpreload
-    DESTINATION bin
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
   )
 endif()
@@ -666,7 +668,7 @@ endif()
 configure_file(bld/obenv.in obenv @ONLY)
 install(
   FILES ${g-speak_BINARY_DIR}/obenv
-  DESTINATION bin
+  DESTINATION "${CMAKE_INSTALL_BINDIR}"
   PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 
