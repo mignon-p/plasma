@@ -139,6 +139,77 @@ static void test_null_slaw_with_prolo (void)
   slaw_free (r);
 }
 
+static const char *const relative_expected_lines[] =
+  {
+    "slaw[13o.0x00]: MAP (4 elems): {",
+    " 1: slaw[3o.0x08]: CONS:",
+    " 1:  L: slaw[1o.0x10]: STR(3): \"nil\"",
+    " 1:  R: slaw[1o.0x18]: NIL.",
+    " 2: slaw[3o.0x20]: CONS:",
+    " 2:  L: slaw[1o.0x28]: STR(5): \"false\"",
+    " 2:  R: slaw[1o.0x30]: BOOLEAN: false",
+    " 3: slaw[3o.0x38]: CONS:",
+    " 3:  L: slaw[1o.0x40]: STR(5): \"empty\"",
+    " 3:  R: slaw[1o.0x48]: MAP (0 elems): {",
+    " 3:  R:  }",
+    " 4: slaw[3o.0x50]: CONS:",
+    " 4:  L: slaw[1o.0x58]: STR(5): \"int32\"",
+    " 4:  R: slaw[1o.0x60]: INT32 = 12",
+    " }",
+    NULL
+  };
+
+static void diff_lines (const char *actual, const char *const *expected)
+{
+  char   *str = strdup (actual);
+  char   *s1  = str;
+  int     i;
+  char   *line;
+
+  for (i = 0; expected[i]; i++)
+    {
+      line = strtok (s1, "\n");
+      if (strcmp (line, expected[i]) != 0)
+        {
+          OB_FATAL_ERROR_CODE (0x2031b00d,
+                               "On line %d,\n"
+                               "  expected '%s'\n"
+                               "  but got  '%s'\n",
+                               i + 1,
+                               expected[i],
+                               (line ? line : "(null)"));
+        }
+
+      s1 = NULL;
+    }
+
+  line = strtok (s1, "\n");
+  if (line != NULL)
+    {
+      OB_FATAL_ERROR_CODE (0x2031b00e,
+                           "Did not expect extra line\n"
+                           "  '%s'\n", line);
+    }
+
+  free (str);
+}
+
+static void test_relative_offset (void)
+{
+  slaw s = slaw_map_inline_cf ("nil",   slaw_nil(),
+                               "false", slaw_boolean (false),
+                               "empty", slaw_map_empty(),
+                               "int32", slaw_int32 (12),
+                               NULL);
+  slaw r = slaw_spew_overview_to_string_ex (s, true, NULL);
+  const char *str = slaw_string_emit (r);
+
+  diff_lines (str, relative_expected_lines);
+
+  slaw_free (r);
+  slaw_free (s);
+}
+
 int main (int argc, char **argv)
 {
   OB_DIE_ON_ERROR (OB_CHECK_ABI ());
@@ -150,6 +221,7 @@ int main (int argc, char **argv)
   test_prolo_on_list ();
   test_null_slaw ();
   test_null_slaw_with_prolo ();
+  test_relative_offset ();
 
   return EXIT_SUCCESS;
 }
