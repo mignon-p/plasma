@@ -1,0 +1,213 @@
+# Running the Tests
+
+## Prerequisites
+
+Tests are built by default. You can skip building them by passing
+`-DBUILD_TESTS=OFF` to cmake at configure time. All commands below
+should be run from the build directory:
+
+```sh
+cd /path/to/plasma/build
+```
+
+## Quick Start
+
+```sh
+ninja check
+```
+
+This builds everything, starts all required test server fixtures,
+runs all 164 tests, and stops the fixtures.
+
+## Test Fixtures
+
+A *fixture* is a test environment defined by which pool transport
+is used. The available fixtures are:
+
+| Fixture | Transport | Requirements |
+|---------|-----------|--------------|
+| `local` | mmap pools (filesystem) | nothing |
+| `tcp`   | TCP pools | `pool_tcp_server` |
+| `tcpo`  | TCP pools, opportunistic TLS | `pool_tcp_server`, OpenSSL |
+| `tcps`  | TCP pools, TLS with client certs | `pool_tcp_server`, OpenSSL |
+
+`tcpo` and `tcps` are only included when OpenSSL was found at
+configure time.
+
+Most libPlasma C and C++ tests run against all applicable fixtures,
+so each such test may run up to four times. Tests in libLoam, and
+tests specific to mmap behavior, run against `local` only.
+
+The fixture definitions (environment variables, pool server options,
+and TLS certificates) live in `bld/cmake/fixtures/<name>/`.
+
+## Running All Tests
+
+### Via ninja
+
+```sh
+ninja check
+```
+
+This is the standard way to run the full test suite. Internally it
+calls `ctest -V`, which reads `CTestCustom.cmake` to start and stop
+fixtures automatically.
+
+### Via ctest
+
+```sh
+ctest -V
+```
+
+Equivalent to `ninja check` once the build is up to date.
+
+## Selecting Tests to Run
+
+### By name (regex)
+
+```sh
+# Run one specific test
+ctest -V -R LoamGTest
+
+# Run all tests whose names contain "Slaw"
+ctest -V -R Slaw
+
+# Run all tests whose names contain "Pool" or "Hose"
+ctest -V -R "Pool|Hose"
+```
+
+The `-R` pattern is matched as a regular expression against the
+test name.
+
+### By test number
+
+```sh
+# List all tests with their numbers
+ctest -N
+
+# Run tests 1 through 10
+ctest -V -I 1,10
+```
+
+## Restricting to Specific Fixtures
+
+By default, every test runs against all fixtures it was registered
+with. To restrict all tests to a subset of fixtures, set the
+`YT_ONLY_FIXTURES` environment variable:
+
+```sh
+# Run everything using only local (mmap) pools
+YT_ONLY_FIXTURES=local ninja check
+
+# Run everything using local and tcp, but not tcpo or tcps
+YT_ONLY_FIXTURES="local;tcp" ninja check
+```
+
+`YT_ONLY_FIXTURES` accepts a semicolon-separated list of fixture
+names. It filters both the test runs and the fixture
+start/stop lifecycle, so pool servers are only started for the
+fixtures you specify.
+
+## Using yotest Directly
+
+`yotest` is the shell script that manages fixtures and runs
+individual tests. It lives in the build directory (generated from
+`bld/cmake/yotest.in`).
+
+```sh
+# Start a fixture (required before running tests against it)
+./yotest start local
+./yotest start tcp
+
+# Run a single test against one fixture
+./yotest run local LoamGTest
+./yotest run tcp   MiscPoolTest
+
+# Run a single test against multiple fixtures at once
+./yotest run "local;tcp" MiscPoolTest
+
+# Start all fixtures
+./yotest start all
+
+# Stop a fixture
+./yotest stop tcp
+
+# Stop all fixtures
+./yotest stop all
+
+# Kill any lingering pool_tcp_server processes
+./yotest killall
+
+# List fixture names
+./yotest list
+```
+
+Each fixture's pool server log is written to:
+
+```
+yotest.d/<fixture>/pool_tcp_server.log
+```
+
+Each test's output log is written to:
+
+```
+yotest.d/<fixture>/<testname>.log
+```
+
+Note: tests are not designed to run in parallel. Do not use
+`ctest -j`.
+
+## Running Test Binaries Directly
+
+Compiled test binaries can be run directly without yotest. For
+tests that use local pools, the required environment variables are
+set automatically by yotest, but for quick debugging you can set
+them manually:
+
+```sh
+export OB_POOLS_DIR=$(mktemp -d)
+export POOL_SIZE=1048576
+export POOL_TOC_CAPACITY=50
+export TEST_POOL=test_pool
+export OB_TEST_PROCTOR=YEP
+./libLoam/c/tests/LoamGTest
+```
+
+For TCP pool tests, see the environment variables set by the
+`do_run` function in `bld/cmake/yotest.in` and the pool server
+options in `bld/cmake/fixtures/tcp/poolserveropts.txt`.
+
+## Build-Time Options Affecting Tests
+
+These are set at configure time, e.g. `cmake -DASAN=ON ..`:
+
+| Option | Default | Effect |
+|--------|---------|--------|
+| `BUILD_TESTS` | `ON` | Build test binaries; set `OFF` to skip |
+| `BUILD_CXX_LIBS` | auto | When `OFF`, libLoam++ and libPlasma++ tests are not built |
+| `ASAN` | `OFF` | Enable AddressSanitizer |
+| `TSAN` | `OFF` | Enable ThreadSanitizer |
+| `COVERAGE` | `OFF` | Enable gcov/lcov coverage instrumentation |
+
+## Test Suite Structure
+
+| Source directory | Fixtures | Contents |
+|-----------------|----------|----------|
+| `libLoam/c/tests/` | local | libLoam C unit tests |
+| `libLoam/c++/tests/` | local | libLoam++ unit tests |
+| `libLoam/c++/samples/` | local | libLoam++ sample programs (run as tests) |
+| `libPlasma/c/t/` | local | libPlasma C unit tests (slaws, proteins, pools) |
+| `libPlasma/c/tests-mmap-only/` | local | mmap-specific pool tests |
+| `libPlasma/c/tests/` | local, tcp[, tcpo, tcps] | Transport-independent pool tests |
+| `libPlasma/c++/tests/` | local, tcp[, tcpo, tcps] | libPlasma++ pool tests |
+| `libPlasma/zeroconf/tests/` | local | Zeroconf/mDNS tests |
+
+`tcpo` and `tcps` are included in the bracket entries only when
+OpenSSL was found at configure time.
+
+## Special Test: diffGitStatusTest
+
+`diffGitStatusTest` checks that running cmake did not leave any
+untracked files in the source tree. If it fails, you either need
+to `git add` a new source file, or add the generated file's path
+to `.gitignore`.
