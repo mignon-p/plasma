@@ -23,6 +23,9 @@ Fixtures:
 You may also specify a set of fixtures with
   all       - all of the above
   local;tcp - semicolon separated list of fixtures
+Environment variables:
+  YT_ONLY_FIXTURES - if set, restrict all operations to listed fixtures
+    e.g. YT_ONLY_FIXTURES=local ninja check
 
 Example session of descent from high level tools to lower level ones:
   # Build as usual (including extra steps for first run)
@@ -535,6 +538,26 @@ all)
 "") usage; exit 1;;
 esac
 shift
+
+# If YT_ONLY_FIXTURES is set, restrict the fixture list to only
+# those fixtures (e.g. YT_ONLY_FIXTURES=local ninja check).
+if test -n "$YT_ONLY_FIXTURES"
+then
+    yt_only="$(echo "$YT_ONLY_FIXTURES" | tr ';' ' ')"
+    filtered=""
+    for fixopt in $fixopts
+    do
+        for allowed in $yt_only
+        do
+            if test "$fixopt" = "$allowed"
+            then
+                filtered="$filtered $fixopt"
+                break
+            fi
+        done
+    done
+    fixopts="${filtered# }"
+fi
 
 case "$cmd" in
 start)
