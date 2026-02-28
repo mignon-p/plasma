@@ -103,6 +103,7 @@ ASAN="@ASAN@"
 abs_top_builddir="@abs_top_builddir@"
 abs_top_srcdir="@abs_top_srcdir@"
 COVERAGE="@COVERAGE@"
+OPENSSL_FOUND="@OPENSSL_FOUND@"
 TSAN="@TSAN@"
 
 # sigh.  ALL_BIN_DIRS_ABS_COLONSEP is already in cygwin-friendly form,
@@ -117,6 +118,11 @@ esac
 # The test fixtures this script implements
 yt_fixtures_srctop="$abs_top_srcdir"/bld/cmake/fixtures
 yt_all_fixtures="$(ls "$yt_fixtures_srctop")"
+# tcps and tcpo require OpenSSL; drop them if it was not found at build time
+case "$(echo "$OPENSSL_FOUND" | tr A-Z a-z)" in
+1|yes|on|true) ;;
+*) yt_all_fixtures="$(echo "$yt_all_fixtures" | grep -v '^tcps$\|^tcpo$')";;
+esac
 
 # Remove /opt/oblong/g-speak* from PATH to avoid running against old installs
 PATH="$(echo "$PATH" | tr : '\012' | grep -v /opt/oblong/g-speak | tr '\012' :)"

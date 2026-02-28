@@ -24,9 +24,10 @@ set(
 set(Plasma++Tests_FIXTURES
   local
   tcp
-  tcpo
-  tcps
 )
+if(OPENSSL_FOUND)
+  list(APPEND Plasma++Tests_FIXTURES tcpo tcps)
+endif()
 set(Plasma++Tests_LINK_LIBS SlawTypesTest Plasma++ ${Plasma++_LINK_LIBS})
 generate_tests("${Plasma++Tests_TESTS}" "${Plasma++Tests_LINK_LIBS}" "${Plasma++Tests_FIXTURES}")
 
