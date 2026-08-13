@@ -680,12 +680,44 @@ install(
 # This must be the last subdirectory added
 add_subdirectory(bld/cmake)
 
+#------------- prepare messages ----------
+
+if(YAML_LIB)
+  set(_yaml_found "FOUND")
+else()
+  set(_yaml_found "not found")
+endif()
+
+if(OPENSSL_FOUND)
+  set(_ossl_found "FOUND")
+else()
+  set(_ossl_found "not found")
+endif()
+
+if(Boost_FOUND)
+  set(_boost_found "FOUND")
+else()
+  set(_boost_found "not found")
+endif()
+
+if(ICU_LIBRARIES)
+  set(_icu_found "FOUND")
+else()
+  set(_icu_found "not found")
+endif()
+
 #------------- Tell user what happened ---------------
 
 MESSAGE("")
 MESSAGE("----------------- Summary -----------------------------------")
 MESSAGE("")
 MESSAGE("CMAKE_BINARY_DIR:  ${CMAKE_BINARY_DIR} (directory cmake was run in)")
+MESSAGE("")
+MESSAGE("--------- Optional libraries --------------------------------")
+MESSAGE("libYaml:           ${_yaml_found}")
+MESSAGE("OpenSSL:           ${_ossl_found}")
+MESSAGE("Boost:             ${_boost_found}")
+MESSAGE("ICU:               ${_icu_found}")
 MESSAGE("")
 MESSAGE("--------- -D Options from commandline -----------------------")
 MESSAGE("CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
