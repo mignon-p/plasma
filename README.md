@@ -79,6 +79,13 @@ other than the build system dependencies (cmake, ninja, and
 pkg-config).
 
 Use your package manager (brew, apt, yum, zypper, etc) to install them.
+For example, on Ubuntu, the invocation might be something like this:
+
+```
+sudo apt install build-essential ninja-build cmake pkgconf       \
+                 libboost-all-dev libyaml-dev doxygen libssl-dev \
+                 libicu-dev libavahi-client-dev
+```
 
 To build on Linux/Intel MacOS, assuming you're in the same directory as
 this README:
