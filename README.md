@@ -90,21 +90,25 @@ sudo apt install build-essential ninja-build cmake pkgconf       \
 To build on Linux/Intel MacOS, assuming you're in the same directory as
 this README:
 
-- `mkdir build`
-- `cd build`
-- `cmake -GNinja ..`
-- `ninja`
+```
+mkdir build
+cd build
+cmake -GNinja ..
+ninja
+```
 
 Building on Apple Silicon is a bit more complicated:
 
-- `brew install ninja cmake libyaml boost icu4c openssl`
-- `export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"`
-- `export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"`
-- `export LDFLAGS="-L/opt/homebrew/opt/openssl@3/lib -L/opt/homebrew/opt/icu4c/lib -L/opt/homebrew/lib"`
-- `mkdir build`
-- `cd build`
-- `cmake -GNinja ..`
-- `ninja`
+```
+brew install ninja cmake libyaml boost icu4c openssl
+export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"
+export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/icu4c/include"
+export LDFLAGS="-L/opt/homebrew/opt/openssl@3/lib -L/opt/homebrew/opt/icu4c/lib -L/opt/homebrew/lib"
+mkdir build
+cd build
+cmake -GNinja ..
+ninja
+```
 
 ... aaaaaand it gets even worse, with versions of OSX (yeah, that's
 what this sentence calls it) at 13.6 or later, or with the M2 chip, or
@@ -114,9 +118,10 @@ enbloatening of the compile (but not link) environment variables with
 `-I/opt/homebrew/opt/libyaml/include` -- that is, replace the first
 two in the sequence above with the following:
 
-- `export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/libyaml/include -I/opt/homebrew/opt/icu4c/include"`
-- `export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/libyaml/include -I/opt/homebrew/opt/icu4c/include"`
-
+```
+export CXXFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/libyaml/include -I/opt/homebrew/opt/icu4c/include"
+export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/libyaml/include -I/opt/homebrew/opt/icu4c/include"
+```
 
 *N.B.*: it's not a problem to use the two overspecified compilation
 flags-exports foregoing with an Apple Silicon machine for which the
