@@ -237,7 +237,7 @@ RUDE_EXAMPLE = <<'END'
 rude_data: !!binary wAHQDQ==
 END
 
-class SlawTest < Test::Unit::TestCase
+class SlawTest < Minitest::Test
 
   def test_nested_slaw_in_list
     s = Slaw.new( [1,

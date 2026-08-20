@@ -26,7 +26,7 @@ def my_list_pools
   end
 end
 
-class PoolTest < Test::Unit::TestCase
+class PoolTest < Minitest::Test
 
   def setup
     @feeders = Array.new

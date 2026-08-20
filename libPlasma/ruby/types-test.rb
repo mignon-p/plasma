@@ -282,7 +282,7 @@ end
 # test loops for numeric types
 #
 
-class PoolTypesTest < Test::Unit::TestCase
+class PoolTypesTest < Minitest::Test
   def test_all_basic_types
     h = Pool.participate( PNAME );
     h.rewind

@@ -134,7 +134,7 @@ class TimeCognizantAwaiter < GangBasicAwaiter
 end
 
 
-class TimePseudoHoseTest < Test::Unit::TestCase
+class TimePseudoHoseTest < Minitest::Test
 
   def setup
     @feeders = Array.new

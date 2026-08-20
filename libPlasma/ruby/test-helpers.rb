@@ -6,8 +6,8 @@ require 'rbconfig'
 # test/unit went away in Ruby 2.0, but we still need to build on ruby 1.x
 begin
   require 'minitest/autorun'
-  Test = MiniTest
-  module MiniTest
+  Test = Minitest
+  module Minitest
     # Allow assert_not_nil, even though it's obsolete
     module Assertions
       alias assert_not_nil refute_nil
@@ -15,8 +15,9 @@ begin
   end
 rescue LoadError
   require 'test/unit'
-  MiniTest = Test
+  Minitest = Test
   module Test
+    Test = Unit::TestCase
     Assertions = Unit::Assertions
     # Allow refute_nil, even though it's from the future
     module Assertions

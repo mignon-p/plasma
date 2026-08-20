@@ -86,7 +86,7 @@ LSBRP = '/usr/bin/lsb_release' # for Linux
 SV = '/usr/bin/sw_vers' # for Mac OS X
 CPUINFO = '/proc/cpuinfo' # for Linux
 
-class ObVersionTest < Test::Unit::TestCase
+class ObVersionTest < Minitest::Test
   if HAVE_JSON
     def test_yaml_json_equal
       unjson = JSON.load($vers_data)
