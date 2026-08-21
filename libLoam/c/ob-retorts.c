@@ -87,9 +87,12 @@ const char *ob_error_string_literal (ob_retort err)
       default:
         // See if this was an errno wrapped in a retort
         e = ob_retort_to_errno (err);
-	const char *s = strerror(e);
-	if (s)
-	  return s;
+        if (e > 0)
+          {
+            const char *s = strerror(e);
+            if (s)
+              return s;
+          }
         // if (e > 0 && e < NERR)
         //   {
         //     const char *s = ERRLIST[e];
