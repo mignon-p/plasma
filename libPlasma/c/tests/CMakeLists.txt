@@ -65,9 +65,10 @@ endif()
 set(PlasmaTests_FIXTURES
   local
   tcp
-  tcpo
-  tcps
 )
+if(OPENSSL_FOUND)
+  list(APPEND PlasmaTests_FIXTURES tcpo tcps)
+endif()
 set(PlasmaTests_LINK_LIBS Plasma ${Plasma_LINK_LIBS})
 generate_tests("${PlasmaTests_TESTS}" "${PlasmaTests_LINK_LIBS}" "${PlasmaTests_FIXTURES}")
 

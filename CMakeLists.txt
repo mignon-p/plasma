@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 3.6.2)
+cmake_minimum_required (VERSION 3.12...4.2)
 
 project(g-speak CXX C)
+
+include(GNUInstallDirs)
 
 # Compatibility options
 option(PLASMA_LEGACY_MODE "Build for compatibility with older systems" OFF)
@@ -125,6 +127,9 @@ endif()
 # are absent and the user hasn't explicitly requested C++ libs.
 set(Boost_USE_DEBUG_RUNTIME FALSE)
 set(BOOST_ROOT ${YOBUILD})
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+  cmake_policy(SET CMP0167 NEW)
+endif()
 find_package(Boost QUIET COMPONENTS filesystem regex)
 # ICU is not found via find_package here to avoid overwriting ICU_LIBRARIES
 # with absolute paths that cause trouble in .pc files; use find_library just
@@ -454,10 +459,10 @@ MACRO(pod2manhtml _sourcefile _manext)
         COMMAND ${indexcmd} -o ${_doc_bindir}/index.html ${_doc_bindir}/htmlman/*-man.html
         VERBATIM
     )
-    INSTALL(FILES ${doc_bindir}/htmlman/${_outhtml} DESTINATION share/doc/${PRODNAME}/htmlman )
-    INSTALL(FILES ${doc_bindir}/${_outman}          DESTINATION share/man/man${_manext} )
+    INSTALL(FILES ${doc_bindir}/htmlman/${_outhtml} DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${PRODNAME}/htmlman" )
+    INSTALL(FILES ${doc_bindir}/${_outman}          DESTINATION "${CMAKE_INSTALL_MANDIR}/man${_manext}" )
 ENDMACRO(pod2manhtml)
-INSTALL(FILES ${doc_bindir}/index.html DESTINATION share/doc/${PRODNAME} )
+INSTALL(FILES ${doc_bindir}/index.html DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${PRODNAME}" )
 
 #------------- test support ---------------
 
@@ -520,7 +525,7 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V)
 function(add_wrapped_test _myTest _myTestRunner _myFixtures)
   add_test(
     NAME ${_myTest}
-    COMMAND "${SHELL}" ${g-speak_BINARY_DIR}/yotest run "${_myFixtures}" ${_myTestRunner}
+    COMMAND ${g-speak_BINARY_DIR}/yotest run "${_myFixtures}" ${_myTestRunner}
   )
 endfunction()
 
@@ -656,7 +661,7 @@ if (ASAN OR (UNIX AND NOT APPLE))
   # Install unconditionally on Linux because conditional debian packaging is... hard.
   install(
     FILES bld/cmake/asanpreload
-    DESTINATION bin
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
   )
 endif()
@@ -666,7 +671,7 @@ endif()
 configure_file(bld/obenv.in obenv @ONLY)
 install(
   FILES ${g-speak_BINARY_DIR}/obenv
-  DESTINATION bin
+  DESTINATION "${CMAKE_INSTALL_BINDIR}"
   PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 
@@ -675,12 +680,44 @@ install(
 # This must be the last subdirectory added
 add_subdirectory(bld/cmake)
 
+#------------- prepare messages ----------
+
+if(YAML_LIB)
+  set(_yaml_found "FOUND")
+else()
+  set(_yaml_found "not found")
+endif()
+
+if(OPENSSL_FOUND)
+  set(_ossl_found "FOUND")
+else()
+  set(_ossl_found "not found")
+endif()
+
+if(Boost_FOUND)
+  set(_boost_found "FOUND")
+else()
+  set(_boost_found "not found")
+endif()
+
+if(ICU_LIBRARIES)
+  set(_icu_found "FOUND")
+else()
+  set(_icu_found "not found")
+endif()
+
 #------------- Tell user what happened ---------------
 
 MESSAGE("")
 MESSAGE("----------------- Summary -----------------------------------")
 MESSAGE("")
 MESSAGE("CMAKE_BINARY_DIR:  ${CMAKE_BINARY_DIR} (directory cmake was run in)")
+MESSAGE("")
+MESSAGE("--------- Optional libraries --------------------------------")
+MESSAGE("libYaml:           ${_yaml_found}")
+MESSAGE("OpenSSL:           ${_ossl_found}")
+MESSAGE("Boost:             ${_boost_found}")
+MESSAGE("ICU:               ${_icu_found}")
 MESSAGE("")
 MESSAGE("--------- -D Options from commandline -----------------------")
 MESSAGE("CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")

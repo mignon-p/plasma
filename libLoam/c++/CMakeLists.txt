@@ -148,12 +148,12 @@ install (
 
 install (
   FILES ${Loam++_HEADERS}
-  DESTINATION "include/libLoam/c++"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libLoam/c++"
 )
 
 install (
   TARGETS Loam++
-  RUNTIME DESTINATION "bin"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
@@ -161,7 +161,7 @@ install (
 if (MSVC)
   install(
     FILES ${Loam++_BINARY_DIR}/${BIN_SUBDIR}/Loam++.pdb
-    DESTINATION "bin"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     CONFIGURATIONS Debug RelWithDebInfo
   )
 endif()

@@ -1,6 +1,6 @@
 # /* (c) 2010 Oblong Industries */
 
-cmake_minimum_required(VERSION 3.6.2)
+cmake_minimum_required(VERSION 3.12...4.2)
 project(Plasma)
 
 # Avoid cmake warnings on Mac
@@ -220,18 +220,18 @@ install (
 
 install (
   FILES ${Plasma_HEADERS}
-  DESTINATION "include/libPlasma/c"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libPlasma/c"
 )
 
 install (
   FILES ob-plasma-cert.sh
-  DESTINATION bin
+  DESTINATION "${CMAKE_INSTALL_BINDIR}"
   PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 
 install (
   TARGETS Plasma ${Plasma_PROGRAMS}
-  RUNTIME DESTINATION "bin"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
@@ -239,7 +239,7 @@ install (
 if (MSVC)
   install(
     FILES ${Plasma_BINARY_DIR}/${BIN_SUBDIR}/Plasma.pdb
-    DESTINATION "bin"
+    DESTINATION "${CMAKE_INSTALL_BINDIR}"
     CONFIGURATIONS Debug RelWithDebInfo
   )
 endif()

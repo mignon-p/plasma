@@ -15,13 +15,13 @@ install(
         ObGeneratePC.cmake
         ObGenerateProject.cmake
         ObGetSettings.cmake
-  DESTINATION lib/cmake
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake"
 )
 
 #---- begin debian alternatives magic for cmake ----
 # When cmake sees 'find_package(Oblong)', it evaluates
-# ../lib/cmake/Oblong/OblongConfig.cmake 
-# from each directory in PATH.  
+# ../lib/cmake/Oblong/OblongConfig.cmake
+# from each directory in PATH.
 # In Ubuntu, we register symlinks in /usr/bin for peek, poke, etc., and
 # a symlink in /usr/lib/cmake for OblongConfig.cmake.
 # See ../../debian/oblong-loam4.3.postinst
@@ -29,7 +29,7 @@ install(
 configure_file(Oblong/OblongConfig.cmake.in "${g-speak_BINARY_DIR}/OblongConfig.cmake" @ONLY)
 install(
   FILES ${g-speak_BINARY_DIR}/OblongConfig.cmake
-  DESTINATION lib/cmake/Oblong
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Oblong"
 )
 #---- end debian alternatives magic for cmake ----
 

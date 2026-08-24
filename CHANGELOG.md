@@ -110,3 +110,32 @@
 * Make most dependencies optional, and change what is built accordingly.
   Allow building the C libraries without the C++ libraries.
   [#23](https://github.com/plasma-hamper/plasma/pull/23)
+
+* Use `GNUInstallDirs` in build system.  (Apparently this had been used
+  in the Oblong code base, but was removed when Plasma was extracted.)
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Restore `CMAKE_INSTALL_FULL_LIBDIR` in `libLoam.pc` LIBS flags.  This
+  had been removed because it was empty and was causing problems, but
+  re-enabling `GNUInstallDirs` makes it possible to restore this.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Update `cmake_minimum_required` to `VERSION 3.12...4.2`, and fix
+  warnings (and other issues) caused by newer CMake versions.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Remove undefined `${SHELL}` from `add_wrapped_test` command.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Add `YT_ONLY_FIXTURES` env var to yotest to restrict test fixture
+  list.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Skip tcps/tcpo test fixtures when OpenSSL is not found.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Add `TESTS.md`, a comprehensive guide to running the test suite.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* When running CMake, summarize which optional libraries were found.
+  [#24](https://github.com/plasma-hamper/plasma/pull/24)
