@@ -16,7 +16,7 @@ static void test_false_null_matches_non_ex (void)
 {
   slaw s = slaw_string ("phosphorescent");
   slaw r1 = slaw_spew_overview_to_string (s);
-  slaw r2 = slaw_spew_overview_to_string_ex (s, false, NULL);
+  slaw r2 = slaw_spew_overview_to_string_ex (s, 0, NULL);
   if (!slawx_equal (r1, r2))
     OB_FATAL_ERROR_CODE (0x2031b000,
                          "expected:\n%s\nbut got:\n%s\n",
@@ -34,8 +34,11 @@ static void test_false_null_matches_non_ex (void)
 static void test_relative_differs_from_absolute (void)
 {
   slaw s = slaw_string ("phosphorescent");
-  slaw rel = slaw_spew_overview_to_string_ex (s, true, NULL);
-  slaw abs = slaw_spew_overview_to_string_ex (s, false, NULL);
+  slaw rel =
+      slaw_spew_overview_to_string_ex (s, SLAW_SPEW_FLAG_REL_OFF, NULL);
+  slaw abs =
+      slaw_spew_overview_to_string_ex (s, 0, NULL);
+
   if (slawx_equal (rel, abs))
     OB_FATAL_ERROR_CODE (
       0x2031b001,
@@ -51,7 +54,7 @@ static void test_relative_differs_from_absolute (void)
 static void test_relative_offset_is_zero_for_top_level (void)
 {
   slaw s = slaw_string ("abc");
-  slaw r = slaw_spew_overview_to_string_ex (s, true, NULL);
+  slaw r = slaw_spew_overview_to_string_ex (s, SLAW_SPEW_FLAG_REL_OFF, NULL);
   const char *str = slaw_string_emit (r);
   if (!str)
     OB_FATAL_ERROR_CODE (0x2031b002, "got NULL string\n");
@@ -69,7 +72,7 @@ static void test_relative_offset_is_zero_for_top_level (void)
 static void test_prolo_on_single_slaw (void)
 {
   slaw s = slaw_string ("phosphorescent");
-  slaw r = slaw_spew_overview_to_string_ex (s, false, ">>");
+  slaw r = slaw_spew_overview_to_string_ex (s, 0, ">>");
   const char *str = slaw_string_emit (r);
   if (!str)
     OB_FATAL_ERROR_CODE (0x2031b004, "got NULL string\n");
@@ -88,7 +91,7 @@ static void test_prolo_on_list (void)
   slaw s =
     slaw_list_inline_f (slaw_string ("alpha"), slaw_string ("beta"),
                         NULL);
-  slaw r = slaw_spew_overview_to_string_ex (s, false, "::");
+  slaw r = slaw_spew_overview_to_string_ex (s, 0, "::");
   const char *str = slaw_string_emit (r);
   if (!str)
     OB_FATAL_ERROR_CODE (0x2031b006, "got NULL string\n");
@@ -111,7 +114,7 @@ static void test_prolo_on_list (void)
 /* Test that a NULL slaw produces "[no slaw -- NULL]". */
 static void test_null_slaw (void)
 {
-  slaw r = slaw_spew_overview_to_string_ex (NULL, false, NULL);
+  slaw r = slaw_spew_overview_to_string_ex (NULL, 0, NULL);
   const char *str = slaw_string_emit (r);
   if (!str)
     OB_FATAL_ERROR_CODE (0x2031b009, "got NULL string\n");
@@ -127,7 +130,7 @@ static void test_null_slaw (void)
  * "[no slaw -- NULL]". */
 static void test_null_slaw_with_prolo (void)
 {
-  slaw r = slaw_spew_overview_to_string_ex (NULL, false, "XX");
+  slaw r = slaw_spew_overview_to_string_ex (NULL, 0, "XX");
   const char *str = slaw_string_emit (r);
   if (!str)
     OB_FATAL_ERROR_CODE (0x2031b00b, "got NULL string\n");
@@ -201,7 +204,7 @@ static void test_relative_offset (void)
                                "empty", slaw_map_empty(),
                                "int32", slaw_int32 (12),
                                NULL);
-  slaw r = slaw_spew_overview_to_string_ex (s, true, NULL);
+  slaw r = slaw_spew_overview_to_string_ex (s, SLAW_SPEW_FLAG_REL_OFF, NULL);
   const char *str = slaw_string_emit (r);
 
   diff_lines (str, relative_expected_lines);

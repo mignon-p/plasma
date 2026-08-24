@@ -1021,19 +1021,28 @@ OB_PLASMA_API slaw slaw_spew_overview_to_string (bslaw s);
  * Same as slaw_spew_overview_to_string(), but with two additional
  * arguments.
  *
- * If \a rel_off is true, annotates subslawx with their byte offset
- * relative to the top-level slaw that was passed to this function.
- * If false, annotates subslawx with their absolute pointer address
- * in memory.  (False is the default used by the other slaw_spew
- * functions.)
+ * \a flags can be a combination of SLAW_SPEW_FLAG constants, "or"-ed
+ * together.
  *
  * If \a prolo is non-NULL, then every line of the spew is
  * prefixed with \a prolo.  (NULL is the default used by the
  * slaw_spew functions that don't take a \a prolo argument.)
  */
 OB_PLASMA_API slaw slaw_spew_overview_to_string_ex (bslaw       s,
-                                                    bool        rel_off,
+                                                    unt32       flags,
                                                     const char *prolo);
+
+/**
+ * Annotates subslawx with their byte offset relative to the top-level
+ * slaw, rather than the absolute address.
+ */
+#define SLAW_SPEW_FLAG_REL_OFF    0x0001
+
+/**
+ * When displaying rude data, include ASCII in addition to hex bytes,
+ * similar to the "hd" command.  Default is to display hex bytes only.
+ */
+#define SLAW_SPEW_FLAG_RUDE_ASCII 0x0002
 //@}
 
 #ifdef __cplusplus

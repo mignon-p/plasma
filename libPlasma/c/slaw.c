@@ -2307,9 +2307,10 @@ static void slaw_spew_numeric_ovewview (bslaw s, fwfunc func, void *whither)
 
 typedef struct slaw_spew_cfg
 {
-  bool  use_relative_offset;
   bslaw start;
   int   num_digits;
+  bool  use_relative_offset;
+  bool  rude_ascii;
 } slaw_spew_cfg;
 
 static unt64 slaw_spew_diff (bslaw start, bslaw here)
@@ -2410,12 +2411,29 @@ static void slaw_spew_internal (bslaw                s,
       if (rudeLen > 0)
         {
           int64 i;
-          char  rudeBuf[OB_HEX_LINE_LEN];
-          _FW ("%srude data: %" OB_FMT_64 "d bytes\n", prolo, rudeLen);
-          for (i = 0; i < rudeLen; i += 16)
+          _FW ("%srude data: %" OB_FMT_64 "d bytes", prolo, rudeLen);
+
+          if (cfg && cfg->rude_ascii)
             {
-              ob_fmt_hex_line (rudeBuf, rude + i, (size_t) (rudeLen - i));
-              _FW ("%s %s\n", prolo, rudeBuf);
+              char rudeBuf[OB_HEX_LINE_LEN];
+              _FW ("\n");
+              for (i = 0; i < rudeLen; i += 16)
+                {
+                  ob_fmt_hex_line (rudeBuf,
+                                   rude + i,
+                                   (size_t) (rudeLen - i));
+                  _FW ("%s %s\n", prolo, rudeBuf);
+                }
+            }
+          else
+            {
+              for (i = 0; i < rudeLen; i++)
+                {
+                  if (i % 16 == 0)
+                    _FW ("\n%s", prolo);
+                  _FW (" %02x", rude[i]);
+                }
+              _FW ("\n");
             }
         }
       _FW ("%s ))", prolo);
@@ -2442,9 +2460,11 @@ void slaw_spew_overview_to_stderr (bslaw s)
 }
 
 slaw slaw_spew_overview_to_string_ex (bslaw       s,
-                                      bool        use_relative_offset,
+                                      unt32       flags,
                                       const char *prolo)
 {
+  bool use_relative_offset = ((flags & SLAW_SPEW_FLAG_REL_OFF) != 0);
+
   slabu *sb = slabu_new ();
   if (!sb)
     return NULL;
@@ -2452,6 +2472,7 @@ slaw slaw_spew_overview_to_string_ex (bslaw       s,
   slaw_spew_cfg cfg;
   OB_CLEAR(cfg);
   cfg.use_relative_offset = use_relative_offset;
+  cfg.rude_ascii          = ((flags & SLAW_SPEW_FLAG_RUDE_ASCII) != 0);
   cfg.start               = s;
 
   if (use_relative_offset)
@@ -2470,7 +2491,7 @@ slaw slaw_spew_overview_to_string_ex (bslaw       s,
 
 slaw slaw_spew_overview_to_string (bslaw s)
 {
-  return slaw_spew_overview_to_string_ex (s, false, NULL);
+  return slaw_spew_overview_to_string_ex (s, 0, NULL);
 }
 
 
