@@ -139,3 +139,12 @@
 
 * When running CMake, summarize which optional libraries were found.
   [#24](https://github.com/plasma-hamper/plasma/pull/24)
+
+* Fix a bug in getting string descriptions for retorts.
+  [#25](https://github.com/plasma-hamper/plasma/pull/25)
+
+* Update Ruby test code to work with minitest gem ≥ 5.0.
+  [#25](https://github.com/plasma-hamper/plasma/pull/25)
+
+* Fix bugs in `spew-test`, `aptest3`, and `diffGitStatusTest`.
+  [#25](https://github.com/plasma-hamper/plasma/pull/25)
