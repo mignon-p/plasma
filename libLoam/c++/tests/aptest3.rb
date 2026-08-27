@@ -17,7 +17,7 @@ end
 ecode, actual = obbacktick("aptest3 -h")
 
 expected = Regexp.new(<<'DONE', Regexp::MULTILINE)
-\Ag-speak SOE \(c\) Oblong Industries - g-speak .+
+\Aplasma \(c\) Oblong Industries and ANIMIST contributors - plasma .+
 Usage: aptest3.* \[options\]\s*
 The wjc gstreamer plugin will select defaults for options left unspecified\.
   -h, --help         print this help, then exit

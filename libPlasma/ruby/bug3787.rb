@@ -24,7 +24,7 @@ def after_depositing
   end
 end
 
-class PoolTest < Test::Unit::TestCase
+class PoolTest < Minitest::Test
   def test_3787
     after_depositing do | hose |
       2048.times do

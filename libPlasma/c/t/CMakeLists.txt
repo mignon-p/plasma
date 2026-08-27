@@ -57,9 +57,8 @@ generate_tests("${PlasmaT_TESTS}" "${PlasmaT_LINK_LIBS}")
 
 # spew-test depends on ICU, so only build it when ICU is available.
 if(ICU_LIBRARIES AND BUILD_TESTS)
-    add_executable(spew-test spew-test.c)
-    target_link_libraries(spew-test gtest gtest_main ${PlasmaT_LINK_LIBS} ${ICU_LIBRARIES})
-    add_wrapped_test(spew-test spew-test "local")
+  set(SpewTest_LINK_LIBS ${PlasmaT_LINK_LIBS} ${ICU_LIBRARIES})
+  generate_tests("spew-test" "${SpewTest_LINK_LIBS}")
 endif()
 
 # Test programs needed by the scripts in the above list (and not already

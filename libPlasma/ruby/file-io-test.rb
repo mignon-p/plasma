@@ -7,7 +7,7 @@ include Plasma
 
 FNAME =  "scratch/slaw-out-test.slawx"
 
-class FileIOTest < Test::Unit::TestCase
+class FileIOTest < Minitest::Test
   # Old Test::Unit ran classes in alphabetical order.
   # New Minitest::Unit runs classes and cases in random order by default.
   # It's hard to be portable between the two.

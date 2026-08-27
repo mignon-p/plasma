@@ -39,8 +39,7 @@ IF(EXISTS "${g-speak_SOURCE_DIR}/.git/config")
   # .gitignore.
   add_test(
     NAME diffGitStatusTest
-    COMMAND "${SHELL}" "${g-speak_SOURCE_DIR}/bld/cmake/diff-git-status-test.sh" "test" "${g-speak_BINARY_DIR}"
+    COMMAND "${g-speak_SOURCE_DIR}/bld/cmake/diff-git-status-test.sh" "test" "${g-speak_BINARY_DIR}"
     WORKING_DIRECTORY "${g-speak_SOURCE_DIR}"
   )
 ENDIF()
-

@@ -123,7 +123,7 @@ END
 
 JSON.create_id = "¿json class?"
 
-class SlawTest < Test::Unit::TestCase
+class SlawTest < Minitest::Test
 
   def test_cons
     j = Slaw.from_yaml(KATE_EXAMPLE).to_json
