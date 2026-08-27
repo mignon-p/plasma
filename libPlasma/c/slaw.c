@@ -2448,26 +2448,15 @@ static void slaw_spew_internal (bslaw                s,
     }
 }
 
+#undef _FW
 
-void slaw_spew_overview (bslaw s, FILE *whither, const char *prolo)
-{
-  slaw_spew_internal (s, format_to_file, (void *) whither, prolo, NULL);
-}
-
-void slaw_spew_overview_to_stderr (bslaw s)
-{
-  slaw_spew_overview (s, stderr, NULL);
-}
-
-slaw slaw_spew_overview_to_string_ex (bslaw       s,
-                                      unt32       flags,
-                                      const char *prolo)
+static void slaw_spew_internal_flags (bslaw                s,
+                                      fwfunc               func,
+                                      void                *whither,
+                                      unt32                flags,
+                                      const char          *prolo)
 {
   bool use_relative_offset = ((flags & SLAW_SPEW_FLAG_REL_OFF) != 0);
-
-  slabu *sb = slabu_new ();
-  if (!sb)
-    return NULL;
 
   slaw_spew_cfg cfg;
   OB_CLEAR(cfg);
@@ -2485,7 +2474,41 @@ slaw slaw_spew_overview_to_string_ex (bslaw       s,
       cfg.num_digits = strlen (buf);
     }
 
-  slaw_spew_internal (s, format_to_slabu, (void *) sb, prolo, &cfg);
+  slaw_spew_internal (s, func, whither, prolo, &cfg);
+}
+
+
+void slaw_spew_overview_ex (bslaw       s,
+                            FILE       *whither,
+                            unt32       flags,
+                            const char *prolo)
+{
+  slaw_spew_internal_flags (s,
+                            format_to_file,
+                            (void *) whither,
+                            flags,
+                            prolo);
+}
+
+void slaw_spew_overview (bslaw s, FILE *whither, const char *prolo)
+{
+  slaw_spew_overview_ex (s, whither, 0, prolo);
+}
+
+void slaw_spew_overview_to_stderr (bslaw s)
+{
+  slaw_spew_overview (s, stderr, NULL);
+}
+
+slaw slaw_spew_overview_to_string_ex (bslaw       s,
+                                      unt32       flags,
+                                      const char *prolo)
+{
+  slabu *sb = slabu_new ();
+  if (!sb)
+    return NULL;
+
+  slaw_spew_internal_flags (s, format_to_slabu, (void *) sb, flags, prolo);
   return slaw_strings_join_slabu_f (sb, NULL);
 }
 
@@ -2494,8 +2517,119 @@ slaw slaw_spew_overview_to_string (bslaw s)
   return slaw_spew_overview_to_string_ex (s, 0, NULL);
 }
 
+typedef struct slaw_spew_func_ctx
+{
+  slaw_spew_func func;
+  void          *cookie;
+  ob_retort      ret;
+  char          *buf;
+  size_t         len;
+  size_t         capacity;
+  size_t         chunk_size;
+} slaw_spew_func_ctx;
 
-#undef _FW
+static void flush_func_buf (slaw_spew_func_ctx *ctx)
+{
+  if (ctx->ret >= OB_OK && ctx->len > 0)
+    {
+      ctx->func (ctx->cookie, ctx->buf, ctx->len);
+      ctx->len = 0;
+    }
+}
+
+static void format_to_func (void *v, const char *fmt, ...)
+{
+  slaw_spew_func_ctx *ctx = (slaw_spew_func_ctx *) v;
+
+  if (ctx->ret < OB_OK)
+    return;
+
+  size_t  available = ctx->capacity - ctx->len;
+  va_list vargs;
+  va_start (vargs, fmt);
+  int retlen = vsnprintf (ctx->buf + ctx->len, available, fmt, vargs);
+  int e      = errno;
+  va_end (vargs);
+
+  if (retlen < 0)
+    {
+      ctx->ret = ob_errno_to_retort (e);
+    }
+  else if (available > (size_t) retlen)
+    {
+      ctx->len += (size_t) retlen;
+    }
+  else
+    {
+      size_t newcap = ctx->capacity + (size_t) retlen + 1;
+      char  *newbuf = (char *) realloc (ctx->buf, newcap);
+
+      if (newbuf == NULL)
+        {
+          ctx->ret = OB_NO_MEM;
+        }
+      else
+        {
+          ctx->buf      = newbuf;
+          ctx->capacity = newcap;
+          available     = ctx->capacity - ctx->len;
+          va_start (vargs, fmt);
+          retlen =
+            vsnprintf (ctx->buf + ctx->len, ctx->capacity, fmt, vargs);
+          e = errno;
+          va_end (vargs);
+
+          if (retlen < 0)
+            ctx->ret = ob_errno_to_retort (e);
+          else if (available > (size_t) retlen)
+            ctx->len += (size_t) retlen;
+          else
+            ctx->ret = OB_UNKNOWN_ERR; /* unlikely, maybe impossible? */
+        }
+    }
+
+  if (ctx->len >= ctx->chunk_size)
+    flush_func_buf (ctx);
+}
+
+ob_retort slaw_spew_overview_to_func (bslaw          s,
+                                      slaw_spew_func func,
+                                      void          *cookie,
+                                      size_t         size_hint,
+                                      unt32          flags,
+                                      const char    *prolo)
+{
+  slaw_spew_func_ctx ctx;
+  OB_CLEAR(ctx);
+  ctx.func     = func;
+  ctx.cookie   = cookie;
+  ctx.ret      = OB_OK;
+  ctx.len      = 0;
+
+  if (size_hint < 80)
+    ctx.chunk_size = 300;
+  else if (size_hint > 10 * 1024 * 1024)
+    ctx.chunk_size = 1023 * 1024;
+  else
+    ctx.chunk_size = size_hint;
+
+  ctx.capacity = ctx.chunk_size + 20;
+  ctx.buf      = calloc (ctx.capacity, sizeof (char));
+
+  if (ctx.buf == NULL)
+    return OB_NO_MEM;
+
+  slaw_spew_internal_flags (s,
+                            format_to_func,
+                            (void *) &ctx,
+                            flags,
+                            prolo);
+  flush_func_buf (&ctx);
+  free (ctx.buf);
+
+  return ctx.ret;
+}
+
 
 slaw_type slaw_gettype (bslaw s)
 {
