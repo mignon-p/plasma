@@ -4,12 +4,19 @@
 /* Test slaw_spew_overview_to_string_ex(). */
 
 #include "libLoam/c/ob-log.h"
+#include "libLoam/c/ob-sys.h"   /* for unistd.h, for isatty() */
 #include "libLoam/c/ob-vers.h"
 #include "libPlasma/c/slaw.h"
 #include "libPlasma/c/protein.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+#define STDOUT_IS_A_TTY true
+#else
+#define STDOUT_IS_A_TTY isatty(STDOUT_FILENO)
+#endif
 
 /* Test that _ex(s, false, NULL) returns the same string as
  * slaw_spew_overview_to_string(s). */
@@ -424,22 +431,70 @@ static void test_noescape_string (void)
   slaw_free (s);
 }
 
+static int         n_passed    = 0;
+static const char *start_green = "";
+static const char *stop_green  = "";
+
+static void print_msg (const char *txt1, const char *txt2)
+{
+  if (txt2)
+    printf ("%s[%s]%s %s\n", start_green, txt1, stop_green, txt2);
+  else
+    printf ("%s[%s]%s\n", start_green, txt1, stop_green);
+}
+
+static void run_test (const char *name, void (*func)(void))
+{
+  print_msg (" RUN      ", name);
+  func();
+  /* tests will exit on failure, so if we reach this point, it passed */
+  n_passed++;
+  print_msg ("       OK ", name);
+}
+
+static void setup (void)
+{
+  const char *nocolor = getenv ("NO_COLOR");
+
+  if ((nocolor == NULL || nocolor[0] == 0) && STDOUT_IS_A_TTY)
+    {
+      start_green = "\033[1m\033[38;5;46m";
+      stop_green  = "\033[0m";
+    }
+
+  print_msg ("==========", NULL);
+}
+
+static void summary (void)
+{
+  char buf[80];
+  snprintf (buf, sizeof(buf), "%d tests.", n_passed);
+  print_msg ("==========", NULL);
+  print_msg ("  PASSED  ", buf);
+}
+
+#define T(x) run_test(#x, x)
+
 int main (int argc, char **argv)
 {
   OB_DIE_ON_ERROR (OB_CHECK_ABI ());
 
-  test_false_null_matches_non_ex ();
-  test_relative_differs_from_absolute ();
-  test_relative_offset_is_zero_for_top_level ();
-  test_prolo_on_single_slaw ();
-  test_prolo_on_list ();
-  test_null_slaw ();
-  test_null_slaw_with_prolo ();
-  test_relative_offset ();
-  test_rude_ascii ();
-  test_rude_noascii ();
-  test_escape_string ();
-  test_noescape_string ();
+  setup();
+
+  T(test_false_null_matches_non_ex);
+  T(test_relative_differs_from_absolute);
+  T(test_relative_offset_is_zero_for_top_level);
+  T(test_prolo_on_single_slaw);
+  T(test_prolo_on_list);
+  T(test_null_slaw);
+  T(test_null_slaw_with_prolo);
+  T(test_relative_offset);
+  T(test_rude_ascii);
+  T(test_rude_noascii);
+  T(test_escape_string);
+  T(test_noescape_string);
+
+  summary();
 
   return EXIT_SUCCESS;
 }
