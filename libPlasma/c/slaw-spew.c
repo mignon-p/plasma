@@ -2,10 +2,12 @@
 /* (c)  oblong industries and ANIMIST contributors */
 
 #include "libLoam/c/ob-types.h"
+#include "libLoam/c/ob-string.h"
 #include "libLoam/c/ob-util.h"
 #include "libPlasma/c/slaw.h"
 #include "libPlasma/c/protein.h"
 #include "libPlasma/c/private/plasma-private.h"
+#include "libPlasma/c/private/plasma-util.h"
 #include "libPlasma/c/slaw-string.h"
 #include "libPlasma/c/slaw-walk.h"
 
@@ -15,6 +17,99 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+static const char hexdigs[16] = "0123456789ABCDEF";
+static const char escapes[7]  = "abtnvfr";
+
+static inline int expand_buffer (char **bufp, size_t *capp)
+{
+  size_t newcap = 2 * (*capp);
+  char  *newbuf = realloc (*bufp, newcap);
+
+  if (newbuf == 0)
+    return -1;
+
+  *bufp = newbuf;
+  *capp = newcap;
+  return 0;
+}
+
+static inline char spew_escape_char_single (unsigned char c)
+{
+  if (c >= 7 && c < 14)
+    return escapes[c - 7];
+  else if (c == '\\' || c == '"')
+    return c;
+  else if (c == 27)
+    return 'e';
+  else
+    return 0;
+}
+
+static inline size_t spew_escape_char (char         *dest,
+                                       unsigned char c,
+                                       bool          allow_utf8)
+{
+  if (allow_utf8 && c >= 128)
+    {
+      dest[0] = c;
+      return 1;
+    }
+
+  char escaped = spew_escape_char_single (c);
+
+  if (escaped != 0)
+    {
+      dest[0] = '\\';
+      dest[1] = escaped;
+      return 2;
+    }
+  else if (c < ' ' || c > '~')
+    {
+      dest[0] = '\\';
+      dest[1] = 'x';
+      dest[2] = hexdigs[c / 16];
+      dest[3] = hexdigs[c % 16];
+      return 4;
+    }
+  else
+    {
+      dest[0] = c;
+      return 1;
+    }
+}
+
+static char *spew_escape_string (const char *str, size_t len)
+{
+  size_t buf_len = 0;
+  size_t buf_cap = len + 16;
+  char  *buf     = (char *) malloc (buf_cap);
+  size_t i;
+  bool   invalid, unused;
+
+  if (buf == NULL)
+    return NULL;
+
+  ob_analyze_utf8 (str, (int64) len, &invalid, &unused);
+
+  for (i = 0; i < len; i++)
+    {
+      size_t available = buf_cap - buf_len;
+      if (available < 5)
+        {
+          if (expand_buffer (&buf, &buf_cap) < 0)
+            {
+              free (buf);
+              return NULL;
+            }
+        }
+
+      buf_len += spew_escape_char (buf + buf_len, str[i], !invalid);
+    }
+
+  buf[buf_len] = 0;
+  return buf;
+}
 
 typedef void (*fwfunc) (void *v, const char *fmt, ...) OB_FORMAT (printf, 2, 3);
 
@@ -256,6 +351,7 @@ typedef struct slaw_spew_cfg
   int   num_digits;
   bool  use_relative_offset;
   bool  rude_ascii;
+  bool  escape_strings;
 } slaw_spew_cfg;
 
 static unt64 slaw_spew_diff (bslaw start, bslaw here)
@@ -292,8 +388,19 @@ static void slaw_spew_internal (bslaw                s,
     }
   if (slaw_is_string (s))
     {
-      _FW ("STR(%" OB_FMT_64 "d): \"%s\"", slaw_string_emit_length (s),
-           slaw_string_emit (s));
+      int64       len = slaw_string_emit_length (s);
+      const char *str = slaw_string_emit (s);
+      char       *buf = NULL;
+
+      if (cfg && cfg->escape_strings && len > 0)
+        {
+          buf = spew_escape_string (str, (size_t) len);
+          if (buf != NULL)
+            str = buf;
+        }
+
+      _FW ("STR(%" OB_FMT_64 "d): \"%s\"", len, str);
+      free (buf);
     }
   else if (slaw_is_cons (s))
     {
@@ -407,6 +514,7 @@ static void slaw_spew_internal_flags (bslaw                s,
   OB_CLEAR(cfg);
   cfg.use_relative_offset = use_relative_offset;
   cfg.rude_ascii          = ((flags & SLAW_SPEW_FLAG_RUDE_ASCII) != 0);
+  cfg.escape_strings      = ((flags & SLAW_SPEW_FLAG_ESCAPE_STRINGS) != 0);
   cfg.start               = s;
 
   if (use_relative_offset)

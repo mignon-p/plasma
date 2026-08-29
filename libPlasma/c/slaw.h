@@ -1082,13 +1082,19 @@ OB_PLASMA_API ob_retort slaw_spew_overview_to_func (bslaw          s,
  * Annotates subslawx with their byte offset relative to the top-level
  * slaw, rather than the absolute address.
  */
-#define SLAW_SPEW_FLAG_REL_OFF    0x0001
+#define SLAW_SPEW_FLAG_REL_OFF        0x0001
 
 /**
  * When displaying rude data, include ASCII in addition to hex bytes,
  * similar to the "hd" command.  Default is to display hex bytes only.
  */
-#define SLAW_SPEW_FLAG_RUDE_ASCII 0x0002
+#define SLAW_SPEW_FLAG_RUDE_ASCII     0x0002
+
+/**
+ * When displaying slaw strings, show escape sequences for unprintable
+ * characters.
+ */
+#define SLAW_SPEW_FLAG_ESCAPE_STRINGS 0x0004
 //@}
 
 #ifdef __cplusplus
