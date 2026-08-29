@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cstdarg>
 #include <ostream>
+#include <iostream>
 #include <functional>
 
 
@@ -203,12 +204,25 @@ Str Slaw::ToPrintableString () const
   return Composite ()->ToStr ();
 }
 
+namespace {
+
+ob_retort spew_ostream_func (void *v, const char *str, size_t len)
+{
+  OStreamReference *osr = (OStreamReference *) v;
+  osr->os.write (str, len);
+  return OB_OK;
+}
+
+}
+
 void Slaw::Spew (OStreamReference os) const
 {
-  if (slaw_.IsNull ())
-    composite_->Spew (os);
-  else
-    slaw_.Spew (os);
+  slaw_spew_overview_to_func (SlawValue (),
+                              spew_ostream_func,
+                              &os,
+                              0,
+                              0,
+                              NULL);
 }
 
 void Slaw::Spew (FILE *ph) const
@@ -220,7 +234,7 @@ void Slaw::Spew (FILE *ph) const
 
 void Slaw::SpewToStderr () const
 {
-  slaw_spew_overview_to_stderr (SlawValue ());
+  Spew (::std::cerr);
 }
 
 

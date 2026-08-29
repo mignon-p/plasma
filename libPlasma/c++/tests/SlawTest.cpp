@@ -163,10 +163,14 @@ TEST (SlawTest1, Spew)
   std::ostringstream silly_string;
   s.Spew (silly_string);
   Str actual (silly_string.str ().c_str ());
-  Str expected ("#MAP(2)<\nKEY: slaw[xxx]: STR(4): \"type\"\n"
-                "VALUE: slaw[xxx]: STR(5): \"Blank\"\n"
-                "KEY: slaw[xxx]: STR(3): \"num\"\n"
-                "VALUE: slaw[xxx]: INT32 = 96\n>");
+  Str expected ("slaw[xxx]: MAP (2 elems): {\n"
+                " 1: slaw[xxx]: CONS:\n"
+                " 1:  L: slaw[xxx]: STR(4): \"type\"\n"
+                " 1:  R: slaw[xxx]: STR(5): \"Blank\"\n"
+                " 2: slaw[xxx]: CONS:\n"
+                " 2:  L: slaw[xxx]: STR(3): \"num\"\n"
+                " 2:  R: slaw[xxx]: INT32 = 96\n"
+                " }");
   actual.ReplaceAll ("slaw\\[\\d+[oq]\\.[0-9A-Fa-fxX]+\\]:", "slaw[xxx]:");
   EXPECT_STREQ (expected, actual);
 }
