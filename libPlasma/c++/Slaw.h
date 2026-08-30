@@ -616,6 +616,16 @@ class OB_PLASMAXX_API Slaw
    * need this, straight to stderr?
    */
   void SpewToStderr () const;
+
+  /**
+   * Spew to a string.
+   */
+  Str SpewToString () const;
+
+  /**
+   * Spew to a string, with options.
+   */
+  Str SpewToString (const SpewOptions &opts) const;
   //@}
 
   /**

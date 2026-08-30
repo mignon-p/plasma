@@ -185,10 +185,7 @@ TEST (SlawTest1, SpewOptions)
                             slaw_nil(),
                             rude, sizeof (rude)));
 
-  std::ostringstream silly_string;
-  s.Spew (silly_string, opts);
-
-  Str actual (silly_string.str ().c_str ());
+  Str actual (s.SpewToString (opts));
   Str expected ("banana: slaw[4o.0x00]: PROT: ((\n"
                 "banana: descrips:\n"
                 "banana: slaw[1o.0x10]: NIL.\n"

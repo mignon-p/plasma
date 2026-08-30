@@ -17,6 +17,7 @@
 #include <cstdarg>
 #include <ostream>
 #include <iostream>
+#include <sstream>
 #include <functional>
 
 
@@ -250,6 +251,19 @@ void Slaw::Spew (FILE *ph, const SpewOptions &opts) const
                          ph,
                          opts.GetFlags (),
                          opts.GetPrefix ());
+}
+
+Str Slaw::SpewToString () const
+{
+  return SpewToString (DEFAULT_SPEW_OPTIONS);
+}
+
+Str Slaw::SpewToString (const SpewOptions &opts) const
+{
+  ::std::ostringstream oss;
+  Spew (oss, opts);
+
+  return Str (oss.str ().c_str ());
 }
 
 void Slaw::SpewToStderr () const
