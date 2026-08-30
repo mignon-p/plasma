@@ -209,10 +209,10 @@ bool ob_match_glob (const char *str, const char *p)
               break;
             return false;
           /*
- * set specification is inclusive, that is [a-z] is a, z and
- * everything in between. this means [z-a] may be interpreted
- * as a set that contains z, a and nothing in between.
- */
+           * set specification is inclusive, that is [a-z] is a, z and
+           * everything in between. this means [z-a] may be interpreted
+           * as a set that contains z, a and nothing in between.
+           */
           case '[':
             if (*p != NEGATE)
               negate = false;
@@ -262,16 +262,16 @@ bool ob_match_glob (const char *str, const char *p)
               return false;
 
             /* p has already been incremented, so if c is NUL,
-           * we can't look at *p without being out of bounds.
-           * Therefore, check if c is NUL here.
-           * (But, note that p wasn't incremented if match
-           * was true, so we have to check for that, too.) */
+             * we can't look at *p without being out of bounds.
+             * Therefore, check if c is NUL here.
+             * (But, note that p wasn't incremented if match
+             * was true, so we have to check for that, too.) */
             if (!match && !c)
               return false;
 
             /*
- * if there is a match, skip past the cset and continue on
- */
+             * if there is a match, skip past the cset and continue on
+             */
             while (*p && *p != ']')
               p++;
             if (!*p++) /* oops! */
