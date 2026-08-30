@@ -213,28 +213,113 @@ ob_retort spew_ostream_func (void *v, const char *str, size_t len)
   return OB_OK;
 }
 
+const unt32 DEFAULT_SPEW_FLAGS =
+  SLAW_SPEW_FLAG_REL_OFF       |
+  SLAW_SPEW_FLAG_RUDE_ASCII    |
+  SLAW_SPEW_FLAG_ESCAPE_STRINGS;
+
+const Slaw::SpewOptions DEFAULT_SPEW_OPTIONS;
+
 }
 
 void Slaw::Spew (OStreamReference os) const
+{
+  Spew (os, DEFAULT_SPEW_OPTIONS);
+}
+
+void Slaw::Spew (OStreamReference os, const SpewOptions &opts) const
 {
   slaw_spew_overview_to_func (SlawValue (),
                               spew_ostream_func,
                               &os,
                               0,
-                              0,
-                              NULL);
+                              opts.GetFlags (),
+                              opts.GetPrefix ());
 }
 
 void Slaw::Spew (FILE *ph) const
 {
+  Spew (ph, DEFAULT_SPEW_OPTIONS);
+}
+
+void Slaw::Spew (FILE *ph, const SpewOptions &opts) const
+{
   if (!ph)
     return;
-  slaw_spew_overview (SlawValue (), ph, NULL);
+  slaw_spew_overview_ex (SlawValue (),
+                         ph,
+                         opts.GetFlags (),
+                         opts.GetPrefix ());
 }
 
 void Slaw::SpewToStderr () const
 {
   Spew (::std::cerr);
+}
+
+Slaw::SpewOptions::SpewOptions () : flags_ (DEFAULT_SPEW_FLAGS)
+{
+}
+
+Slaw::SpewOptions::SpewOptions (unt32 flags) : flags_ (flags)
+{
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::ChangeFlag (unt32 flag, bool use)
+{
+  if (use)
+    return AddFlags (flag);
+  else
+    return RemoveFlags (flag);
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::RelativeOffset (bool use)
+{
+  return ChangeFlag (SLAW_SPEW_FLAG_REL_OFF, use);
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::RudeAscii (bool use)
+{
+  return ChangeFlag (SLAW_SPEW_FLAG_RUDE_ASCII, use);
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::EscapeStrings (bool use)
+{
+  return ChangeFlag (SLAW_SPEW_FLAG_ESCAPE_STRINGS, use);
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::AddFlags (unt32 flags)
+{
+  flags_ |= flags;
+  return *this;
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::RemoveFlags (unt32 flags)
+{
+  flags_ &= ~flags;
+  return *this;
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::SetFlags (unt32 flags)
+{
+  flags_ = flags;
+  return *this;
+}
+
+unt32 Slaw::SpewOptions::GetFlags () const
+{
+  return flags_;
+}
+
+Slaw::SpewOptions &Slaw::SpewOptions::Prefix (const Str& prolo)
+{
+  prolo_ = prolo;
+  return *this;
+}
+
+Str Slaw::SpewOptions::GetPrefix () const
+{
+  return prolo_;
 }
 
 
