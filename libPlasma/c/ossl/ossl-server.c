@@ -140,7 +140,8 @@ ob_retort ob_tls_server_available (void)
 
 ob_retort ob_tls_server_launch_thread (int clear_sock, int cipher_sock,
                                        pthread_t *thr_out, bool anon_ok,
-                                       bool client_auth_required)
+                                       bool client_auth_required,
+                                       pool_tls_info *tls_info)
 {
   ob_retort tort = ob_tls_server_available ();
   if (tort < OB_OK)
@@ -150,7 +151,7 @@ ob_retort ob_tls_server_launch_thread (int clear_sock, int cipher_sock,
                                 thr_out,
                                 (init_server_retort != POOL_ANONYMOUS_ONLY),
                                 anon_ok, client_auth_required, NULL, NULL,
-                                NULL);
+                                NULL, tls_info);
 }
 
 ob_retort ob_tls_server_join_thread (pthread_t thr)

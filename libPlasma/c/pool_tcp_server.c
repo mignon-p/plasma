@@ -556,7 +556,8 @@ first_command:
           OB_DIE_ON_ERROR (ob_nosigpipe_sockopt_x2 (pair));
           OB_DIE_ON_ERROR (
             ob_tls_server_launch_thread (pair[0], net->connfd, &net->tls_thread,
-                                         !require_tls, client_auth));
+                                         !require_tls, client_auth,
+                                         &net->tls_info));
           net->connfd = pair[1];
           send_pret = welcome_new_version_tls (net);
           const int e = errno;

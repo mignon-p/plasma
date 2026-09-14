@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include "plasma_config.h"
+#include "libLoam/c/ob-atomic.h"
 #include "libLoam/c/ob-sys.h"
 #include "libLoam/c/ob-log.h"
 #include "libLoam/c/ob-file.h"
@@ -1033,7 +1034,8 @@ static ob_retort start_tls (pool_net_data *net, const char *hostname,
   if (pret >= OB_OK)
     pret = ob_tls_client_launch_thread (pair[0], net->connfd, &net->tls_thread,
                                         hostname, security != Ob_Secure,
-                                        certificate, private_key);
+                                        certificate, private_key,
+                                        &net->tls_info);
   if (pret < OB_OK)
     return pret;
 
@@ -1653,6 +1655,21 @@ static ob_retort pool_tcp_info (pool_hose ph, int64 hops, protein *return_prot)
                             NULL);
       if (!ingests)
         return OB_NO_MEM;
+
+      if (ob_atomic_int32_ref (&ph->net->tls_info.initialized))
+        {
+          pool_tls_info *info = &ph->net->tls_info;
+
+          slaw tls_ingests =
+            slaw_map_inline_cc ("tls-version",  info->tls_version,
+                                "cipher-suite", info->cipher_suite,
+                                NULL);
+          ingests = slaw_maps_merge_f (ingests, tls_ingests, NULL);
+
+          if (!ingests)
+            return OB_NO_MEM;
+        }
+
       *return_prot = protein_from_ff (NULL, ingests);
       if (!*return_prot)
         return OB_NO_MEM;

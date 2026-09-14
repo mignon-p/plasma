@@ -15,6 +15,17 @@ extern "C" {
 #endif
 
 /**
+ * This is for putting information about the TLS connection in
+ * a place where pool_get_info() can read it.
+ */
+typedef struct pool_tls_info
+{
+  int32 initialized;            /* nonzero means fields below are valid */
+  char tls_version[36];
+  char cipher_suite[160];
+} pool_tls_info;
+
+/**
  * Prints ob_banner() information, but also appends another line
  * about the TLS implementation.  Also, returns OB_OK or POOL_NO_TLS
  * to indicate the presence or absence of TLS support.
@@ -47,7 +58,8 @@ OB_PLASMA_API ob_retort ob_tls_server_launch_thread (int clear_sock,
                                                      int cipher_sock,
                                                      pthread_t *thr_out,
                                                      bool anon_ok,
-                                                     bool client_auth_reqd);
+                                                     bool client_auth_reqd,
+                                                     pool_tls_info *tls_info);
 
 /**
  * Waits for a thread created by ob_tls_server_launch_thread() to finish.
@@ -83,7 +95,8 @@ ob_retort ob_tls_client_available (void);
 ob_retort ob_tls_client_launch_thread (int clear_sock, int cipher_sock,
                                        pthread_t *thr_out, const char *host,
                                        bool anon_ok, const char *certificate,
-                                       const char *private_key);
+                                       const char *private_key,
+                                       pool_tls_info *tls_info);
 
 /**
  * Waits for a thread created by ob_tls_client_launch_thread() to finish.
