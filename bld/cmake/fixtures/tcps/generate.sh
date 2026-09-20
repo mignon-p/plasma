@@ -111,10 +111,13 @@ do_generate() {
   cd "$here"
   rm -f $certs $keys $scratch
 
-  # The server certificate's common name has to match the hostname the
-  # tests connect to, which is always "localhost"; see
-  # OREILLY_post_connection_check() in libPlasma/c/ossl/ossl-validation.c.
-  # The client certificate's name is not checked by anything.
+  # These certificates carry no subjectAltName, so it is the server
+  # certificate's common name that has to match the hostname the tests
+  # connect to, which is always "localhost".  (Once a certificate does
+  # have a subjectAltName, the common name stops being consulted at
+  # all; see ob_ossl_cert_matches_host() in
+  # libPlasma/c/ossl/ossl-validation.c.)  The client certificate's name
+  # is not checked by anything.
   sh "$certtool" -t $lifetime -s $seclevel mkca
   sh "$certtool" -t $lifetime -s $seclevel mkserver localhost
   sh "$certtool" -t $lifetime -s $seclevel mkclient
