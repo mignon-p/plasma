@@ -10,6 +10,8 @@ set(
   ob-atomic.c
   ob-dirs.c
   ob-file.c
+  ob-hash.c
+  ob-hash-city.c
   ob-log.c
   ob-math.c
   ob-rand.c
@@ -27,15 +29,6 @@ if (WIN32)
   list(APPEND Loam_SOURCES win32/ob-sys-win32.c)
   list(APPEND Loam_SOURCES win32/ob-sys-win32-cpp.cpp)
 endif()
-if (UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  enable_language(ASM)
-  list(APPEND Loam_SOURCES ob-hash-64.S)
-elseif (UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_32")
-  enable_language(ASM)
-  list(APPEND Loam_SOURCES ob-hash-32.S)
-else ()
-  list(APPEND Loam_SOURCES ob-hash.c ob-hash-city.c)
-endif ()
 
 set (
   Loam_HEADERS
