@@ -98,6 +98,8 @@ unt64 ob_x86_features (void)
   return reg[3] | (((unt64) reg[2]) << 32);
 }
 
+#ifndef __APPLE__
+
 typedef union
 {
   unt32 u[13];
@@ -132,12 +134,16 @@ static char *cpu_version (void)
   return strdup (bstr);
 }
 
+#endif /* not __APPLE__ */
+
 #else /* OB_HAVE_CPUID */
 
 unt64 ob_x86_features (void)
 {
   return 0;
 }
+
+#ifndef __APPLE__
 
 static char *cpu_version (void)
 {
@@ -160,7 +166,26 @@ static char *cpu_version (void)
   return ret;
 }
 
+#endif /* not __APPLE__ */
+
 #endif /* OB_HAVE_CPUID */
+
+#ifdef __APPLE__
+
+/* On macOS, sysctl gives us the CPU brand string on both Intel and
+ * Apple Silicon, so we don't need cpuid (which doesn't exist on Apple
+ * Silicon) for this.  This is the same approach machine_version()
+ * uses below, just with a different sysctl. */
+static char *cpu_version (void)
+{
+  char buf[80];
+  size_t siz = sizeof (buf);
+  if (0 == sysctlbyname ("machdep.cpu.brand_string", buf, &siz, NULL, 0))
+    return strdup (buf);
+  return strdup ("unknown");
+}
+
+#endif /* __APPLE__ */
 
 static char *os_version (void)
 {
