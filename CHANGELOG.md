@@ -176,3 +176,8 @@
   libYaml and OpenSSL are enabled, and if so, the version of the
   library being used.
   [#27](https://github.com/plasma-hamper/plasma/pull/27)
+
+* Add `tls-version` and `cipher-suite` keys to the information
+  returned by `pool_get_info()` when querying a network connection
+  that uses TLS.
+  [#28](https://github.com/plasma-hamper/plasma/pull/28)
