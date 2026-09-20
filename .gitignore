@@ -109,6 +109,7 @@ obj-*-linux-*/
 
 # Common cmake dirs
 build
+build-*/
 
 # Build artifacts
 .ninja_deps

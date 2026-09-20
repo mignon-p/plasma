@@ -127,6 +127,47 @@ export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/libyaml
 flags-exports foregoing with an Apple Silicon machine for which the
 simpler one would suffice.
 
+### Universal binaries on macOS
+
+To build a universal binary, containing both x86_64 and ARM64 code,
+set `CMAKE_OSX_ARCHITECTURES` when configuring:
+
+```
+mkdir build
+cd build
+cmake -GNinja -D CMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
+ninja
+```
+
+Check the result with `lipo`, which should report both architectures:
+
+```
+lipo -archs libPlasma/c/libPlasma.a
+```
+
+Some things to be aware of:
+
+* **Use a fresh build directory.** The build caches which compiler
+  flags are supported, and those results differ between a
+  single-architecture and a universal build. Reconfiguring an existing
+  build directory will reuse the stale answers and fail to compile.
+
+* **Any optional dependencies must themselves be universal.** If you
+  want YAML or TLS support, then libyaml and openssl each need to
+  contain both architectures; Homebrew does not ship them that way, so
+  you'll have to build them yourself. The build checks for this and
+  warns you if a library is missing an architecture, since otherwise
+  the failure doesn't show up until link time, in the form of a rather
+  cryptic complaint about "building for macOS-arm64 but linking file
+  built for macOS-x86_64".
+
+* **The minimum macOS version becomes 11.0.** ARM64 macOS doesn't go
+  back any further than that, so a universal build sets
+  `CMAKE_OSX_DEPLOYMENT_TARGET` to 11.0 if you haven't set it yourself.
+  This only happens when you ask for an ARM64 build; ordinary
+  single-architecture builds are unaffected, and still work on much
+  older versions of macOS.
+
 ## Installing
 
 If you wish to install Plasma, you can specify the target install path with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To install to the directory `/opt/plasma`, follow these steps:

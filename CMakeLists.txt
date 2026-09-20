@@ -1,5 +1,18 @@
 cmake_minimum_required (VERSION 3.12...4.2)
 
+# A universal build needs a deployment target that both slices can agree
+# on, and arm64 macOS starts at 11.0.  Only do this when arm64 was
+# actually requested, so that builds on old Macs -- which cannot target
+# arm64 anyway -- are completely unaffected.  This has to happen before
+# project(), since the deployment target affects compiler detection;
+# that's also why it tests CMAKE_HOST_APPLE rather than APPLE, which
+# project() has not defined yet.
+if (CMAKE_HOST_APPLE AND CMAKE_OSX_ARCHITECTURES MATCHES "arm64"
+    AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0"
+      CACHE STRING "Minimum macOS version to build for" FORCE)
+endif()
+
 project(g-speak CXX C)
 
 include(GNUInstallDirs)
@@ -254,6 +267,18 @@ endif()
 if (OPENSSL_FOUND)
   add_definitions("-DHAVE_OPENSSL")
 endif()
+
+# For a universal build, warn if any of the libraries we just found are
+# not themselves universal.  (The checks above only test for presence.)
+set(_fat_libs_to_check)
+if (YAML_LIB)
+  list(APPEND _fat_libs_to_check yaml)
+endif()
+if (OPENSSL_FOUND)
+  list(APPEND _fat_libs_to_check ssl crypto)
+endif()
+ObCheckFatLibs(${_fat_libs_to_check})
+unset(_fat_libs_to_check)
 
 set(PLATFORM_LINK_LIBS)
 if (UNIX)
