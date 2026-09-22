@@ -181,3 +181,13 @@
   returned by `pool_get_info()` when querying a network connection
   that uses TLS.
   [#28](https://github.com/plasma-hamper/plasma/pull/28)
+
+* Remove obsolete assembly language files for hash functions.
+  [#29](https://github.com/plasma-hamper/plasma/pull/29)
+
+* Support building universal binaries (x86_64 and ARM64) on macOS.
+  [#29](https://github.com/plasma-hamper/plasma/pull/29)
+
+* Report the CPU brand string on Apple Silicon, when
+  `ob_get_version()` is called with `OB_VERSION_OF_CPU`.
+  [#29](https://github.com/plasma-hamper/plasma/pull/29)
