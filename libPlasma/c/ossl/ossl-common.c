@@ -6,6 +6,7 @@
 #endif
 
 #include "ossl-common.h"
+#include "libLoam/c/ob-atomic.h"
 #include "libLoam/c/ob-rand.h"
 #include "libLoam/c/ob-sys.h"
 #include "libLoam/c/ob-time.h"
@@ -445,6 +446,7 @@ typedef struct
   conacc_func f;
   char host[635]; /* max host name length according to RFC 1123 */
   bool anon_ok;
+  pool_tls_info *tls_info;
 } thread_args;
 
 #ifndef _MSC_VER
@@ -537,15 +539,19 @@ static void *ossl_common_thread_main (void *v)
     }
   else
     {
-      char buf[160], fub[160], vers[32];
-      shrink_spaces (fub, sizeof (fub),
+      char buf[160];
+      pool_tls_info *info = args.tls_info;
+
+      shrink_spaces (info->cipher_suite, sizeof (info->cipher_suite),
                      SSL_CIPHER_description (SSL_get_current_cipher (args.B),
                                              buf, sizeof (buf)));
       OB_LOG_INFO_CODE (0x2050000f,
                         "Connected securely using %s with cipher suite:\n%s",
-                        mangle_version (vers, sizeof (vers),
+                        mangle_version (info->tls_version,
+                                        sizeof (info->tls_version),
                                         SSL_get_version (args.B)),
-                        fub);
+                        info->cipher_suite);
+      ob_atomic_int32_set (&info->initialized, 1);
       t[2] = ob_monotonic_time ();
       OB_LOG_DEBUG_CODE (0x20500008, "handshake took %" OB_FMT_64 "u ns\n"
                                      "starting data transfer\n",
@@ -626,7 +632,8 @@ ob_retort ob_ossl_launch_thread (int clear_sock, int cipher_sock,
                                  pthread_t *thr_out, bool auth_suites,
                                  bool anon_suites, bool client_auth_required,
                                  const char *host, const char *certificate,
-                                 const char *private_key)
+                                 const char *private_key,
+                                 pool_tls_info *tls_info)
 {
   thread_args *args = (thread_args *) calloc (1, sizeof (thread_args));
   if (!args)
@@ -731,6 +738,7 @@ ob_retort ob_ossl_launch_thread (int clear_sock, int cipher_sock,
   args->B = ssl;
   args->f = cafunc;
   args->anon_ok = anon_suites;
+  args->tls_info = tls_info;
   if (host)
     ob_safe_copy_string (args->host, sizeof (args->host), host);
 

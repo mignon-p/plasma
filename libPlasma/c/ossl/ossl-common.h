@@ -18,6 +18,8 @@ typedef SSL_METHOD *(method_func) (void);
 #endif
 typedef int (*conacc_func) (SSL *);
 
+typedef struct pool_tls_info pool_tls_info;
+
 int THREAD_setup (void);
 int THREAD_cleanup (void);
 void OREILLY_data_transfer (ob_sock_t A, SSL *B);
@@ -30,7 +32,8 @@ ob_retort ob_ossl_launch_thread (ob_sock_t clear_sock, ob_sock_t cipher_sock,
                                  pthread_t *thr_out, bool auth_suites,
                                  bool anon_suites, bool client_auth_required,
                                  const char *host, const char *certificate,
-                                 const char *private_key);
+                                 const char *private_key,
+                                 pool_tls_info *tls_info);
 ob_retort ob_ossl_join_thread (pthread_t thr);
 char *ob_ossl_err_as_string (void);
 const char *ob_ossl_interpretation_as_string (char *buf, size_t buf_len,

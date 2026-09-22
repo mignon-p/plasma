@@ -10,6 +10,7 @@
 
 // XXX: eventually don't want to have to include this here
 #include "libLoam/c/ob-pthread.h"
+#include "libPlasma/c/private/pool-tls.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -110,6 +111,11 @@ typedef struct
    * Thread for TLS.  Would eventually like to refactor this somehow.
    */
   pthread_t tls_thread;
+
+  /**
+   * More TLS stuff.  Probably doesn't belong here, but whatever.
+   */
+  pool_tls_info tls_info;
 } pool_net_data;
 
 static inline bool pool_net_supports_cmd (const pool_net_data *net, int cmd_num)

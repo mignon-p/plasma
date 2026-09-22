@@ -56,7 +56,8 @@ ob_retort ob_tls_client_available (void)
 ob_retort ob_tls_client_launch_thread (int clear_sock, int cipher_sock,
                                        pthread_t *thr_out, const char *host,
                                        bool anon_ok, const char *certificate,
-                                       const char *private_key)
+                                       const char *private_key,
+                                       pool_tls_info *tls_info)
 {
   ob_retort tort = ob_tls_client_available ();
   if (tort < OB_OK)
@@ -65,7 +66,8 @@ ob_retort ob_tls_client_launch_thread (int clear_sock, int cipher_sock,
   return ob_ossl_launch_thread (clear_sock, cipher_sock, ossl_client_context,
                                 EINTR_SSL_connect_harder, thr_out,
                                 (ob_tls_num_cert_authorities > 0), anon_ok,
-                                false, host, certificate, private_key);
+                                false, host, certificate, private_key,
+                                tls_info);
 }
 
 ob_retort ob_tls_client_join_thread (pthread_t thr)
