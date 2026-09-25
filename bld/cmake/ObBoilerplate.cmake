@@ -33,6 +33,7 @@
 #
 #   ObFindLibs()        - see $G_SPEAK_HOME/lib/cmake/ObFindLibs.cmake
 #   ObCheckCxxFlags()   - see $G_SPEAK_HOME/lib/cmake/ObCheckCxxFlags.cmake
+#   ObCheckFatLibs()    - see $G_SPEAK_HOME/lib/cmake/ObCheckFatLibs.cmake
 #
 # For apps using the Chromium Embedded Framework to embed a browser,
 # ObFindLibs() may also include FindCEFxxx.cmake to define following functions:
@@ -84,6 +85,7 @@ ENDIF()
 
 INCLUDE("ObCheckCFlags")
 INCLUDE("ObCheckCxxFlags")
+INCLUDE("ObCheckFatLibs")
 INCLUDE("ObFindLibs")
 INCLUDE("ObGeneratePC")
 

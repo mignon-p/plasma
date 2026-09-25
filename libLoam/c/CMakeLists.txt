@@ -10,6 +10,8 @@ set(
   ob-atomic.c
   ob-dirs.c
   ob-file.c
+  ob-hash.c
+  ob-hash-city.c
   ob-log.c
   ob-math.c
   ob-rand.c
@@ -27,15 +29,6 @@ if (WIN32)
   list(APPEND Loam_SOURCES win32/ob-sys-win32.c)
   list(APPEND Loam_SOURCES win32/ob-sys-win32-cpp.cpp)
 endif()
-if (UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  enable_language(ASM)
-  list(APPEND Loam_SOURCES ob-hash-64.S)
-elseif (UNIX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_32")
-  enable_language(ASM)
-  list(APPEND Loam_SOURCES ob-hash-32.S)
-else ()
-  list(APPEND Loam_SOURCES ob-hash.c ob-hash-city.c)
-endif ()
 
 set (
   Loam_HEADERS
@@ -110,9 +103,16 @@ if (NOT WIN32)
   set(FLAGS
      -fno-strict-aliasing
      -std=gnu99
-     -msse2
      -fPIC
   )
+  # clang rejects -msse2 outright when targeting arm64, so leave it out
+  # of universal builds.  HAVE_SSE2 is never actually defined (see
+  # private/dSFMT.h), so dSFMT.c takes the generic scalar path either
+  # way; this flag only affects codegen on 32-bit x86, which is why it
+  # is still passed everywhere else.
+  if (NOT CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+      LIST(APPEND FLAGS "-msse2")
+  endif()
   if (NOT APPLE)
       # Work around http://public.kitware.com/Bug/view.php?id=15526
       LIST(APPEND FLAGS "-finline-functions" "--param max-inline-insns-single=1800")
