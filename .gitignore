@@ -134,3 +134,7 @@ libProtist/
 
 # Generated scripts
 libPlasma/ruby/gembuild/build.sh
+
+# Nix build output symlinks
+result
+result-*

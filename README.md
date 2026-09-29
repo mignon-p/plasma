@@ -168,6 +168,25 @@ Some things to be aware of:
   single-architecture builds are unaffected, and still work on much
   older versions of macOS.
 
+## Nix Build
+
+The repository includes a Nix flake.  To build Plasma and run its
+tests:
+
+    nix build
+
+The result is in `./result` (`result/bin/p-list` and friends).  If
+flakes are not enabled in your Nix configuration, add
+`--extra-experimental-features 'nix-command flakes'`.  For a shell
+with all of the build dependencies:
+
+    nix develop
+
+`package.nix` is written in `callPackage` style, so it can also be
+used from outside the flake.  It builds with `PLASMA_WERROR=OFF`,
+since newer compilers produce warnings that would otherwise break
+the build.
+
 ## Installing
 
 If you wish to install Plasma, you can specify the target install path with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To install to the directory `/opt/plasma`, follow these steps:

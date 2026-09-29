@@ -21,6 +21,7 @@ include(GNUInstallDirs)
 option(PLASMA_LEGACY_MODE "Build for compatibility with older systems" OFF)
 option(PLASMA_ENABLE_TCP_OPTIMIZATIONS "Enable TCP performance optimizations" ON)
 option(PLASMA_ENABLE_LARGE_TRANSFER_LOGGING "Enable logging for transfers >1MB" ON)
+option(PLASMA_WERROR "Treat compiler warnings as errors" ON)
 
 # We don't really have a YOBUILD anymore, but it causes some
 # annoyance if YOBUILD is the empty string, so let's just set
@@ -333,8 +334,13 @@ if (WIN32)
        #/wd4838
     )
 else()
-    set(ERROR_CFLAGS -Werror )
-    set(ERROR_CXXFLAGS -Werror )
+    if (PLASMA_WERROR)
+        set(ERROR_CFLAGS -Werror )
+        set(ERROR_CXXFLAGS -Werror )
+    else()
+        set(ERROR_CFLAGS )
+        set(ERROR_CXXFLAGS )
+    endif()
     set(FLAGS
       -fdiagnostics-show-option
       -Wall
@@ -748,7 +754,7 @@ MESSAGE("--------- -D Options from commandline -----------------------")
 MESSAGE("CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 MESSAGE("CMAKE_BUILD_TYPE:  ${CMAKE_BUILD_TYPE} (choices are Debug, Release, or RelWithDebInfo)")
 MESSAGE("STRICT_WARNINGS:   ${STRICT_WARNINGS}")
-MESSAGE("WERROR:            ${WERROR}")
+MESSAGE("PLASMA_WERROR:     ${PLASMA_WERROR}")
 MESSAGE("BUILD_TESTS:       ${BUILD_TESTS}")
 MESSAGE("BUILD_CXX_LIBS:    ${BUILD_CXX_LIBS}")
 MESSAGE("COVERAGE:          ${COVERAGE}; see https://gitlab.oblong.com/platform/docs/wikis/coverage-testing")
