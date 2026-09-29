@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "g-speak libLoam and libPlasma (slawx and pools)";
+    description = "ANIMIST libLoam and libPlasma (slawx and pools)";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

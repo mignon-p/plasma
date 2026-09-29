@@ -1,5 +1,5 @@
 {
-  description = "Plasma: g-speak's libLoam and libPlasma";
+  description = "Plasma: ANIMIST's libLoam and libPlasma";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
