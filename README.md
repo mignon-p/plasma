@@ -3,7 +3,8 @@
 Plasma is a system for platform- and language-independent data
 encapsulation and distributed, multipoint transmission. Its principal
 implementations are in C and C++, though 'bindings' exist for (at
-least) Java, Python, Javascript, Clojure (sort of), and Guile (mm!).
+least) [Java][java], [Python][python], Javascript, [Rust][rust],
+[Haskell][haskell], Clojure (sort of), and Guile (mm!).
 
 Arbitrarily complex -- in the senses of aggregation and nesting -- data
 structures are represented by objects called 'Slawx' (the plural of 'Slaw')
@@ -30,6 +31,18 @@ endocrinology (rather than telegraphy) metaphor. The name 'Plasma' accordingly
 refers not to the superheated & ionized intrastellar substance but rather to
 the liquid medium by which biological organisms' messaging molecules are
 transported and diffused.
+
+Plasma was originally developed by Oblong Industries, and now falls
+under the open-source [ANIMIST project][animist].  Plasma is
+completely unrelated to [KDE Plasma][kde-plasma]; it just happens to
+have a similar name.
+
+[animist]: https://animist-os.org/
+[kde-plasma]: https://en.wikipedia.org/wiki/KDE_Plasma
+[java]: https://github.com/plasma-hamper/plasma-java-jelly
+[python]: https://github.com/plasma-hamper/python-plasma-cplasma
+[rust]: https://github.com/tomjakubowski/hemogoblin
+[haskell]: https://github.com/mignon-p/hs-plasma
 
 # Libraries in this repository
 
@@ -59,8 +72,8 @@ This repo is mounted to `/work` within the shell. The plasma binaries are on the
 
 ## Nix Build
 
-The repository includes a Nix flake.  To build Plasma and run its
-tests:
+The repository includes a [Nix][nix] flake.  To build Plasma and run
+its tests:
 
     nix build
 
@@ -75,6 +88,8 @@ with all of the build dependencies:
 used from outside the flake.  It builds with `PLASMA_WERROR=OFF`,
 since newer compilers may produce warnings that would otherwise break
 the build.
+
+[nix]: https://nix.dev/
 
 ## CMake and Ninja Build
 
