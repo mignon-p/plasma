@@ -207,3 +207,6 @@
   in a URI.  (They need to be in square brackets, to avoid the
   ambiguity of the colons.)
   [#31](https://github.com/plasma-hamper/plasma/pull/31)
+
+* Added infrastructure for building Plasma as a Nix package.
+  [#32](https://github.com/plasma-hamper/plasma/pull/32)
