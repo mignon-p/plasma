@@ -48,9 +48,14 @@ have a similar name.
 
 ![library dependency diagram](images/libraries.svg)
 
-**libLoam** is a library which contains basic portability and utility functions.  **libPlasma** is the library which implements slawx and pools, and is built on top of libLoam.
+**libLoam** is a library which contains basic portability and utility
+functions.  **libPlasma** is the library which implements slawx and
+pools, and is built on top of libLoam.
 
-Both loam and plasma consist of a core library written in C, and an optional library written in C++.  The C++ library provides a C++ interface to the C library, and in some cases also adds additional functionality.
+Both loam and plasma consist of a core library written in C, and an
+optional library written in C++.  The C++ library provides a C++
+interface to the C library, and in some cases also adds additional
+functionality.
 
 Building the C++ libraries is optional, based on the `BUILD_CXX_LIBS`
 CMake option.  `BUILD_CXX_LIBS` defaults to `ON`, unless the necessary
@@ -68,7 +73,8 @@ Once built, you can open a shell into the built image with:
 
     make shell
 
-This repo is mounted to `/work` within the shell. The plasma binaries are on the PATH (`p-list`, `p-create`, and friends).
+This repo is mounted to `/work` within the shell. The plasma binaries
+are on the PATH (`p-list`, `p-create`, and friends).
 
 ## Nix Build
 
@@ -204,7 +210,9 @@ Some things to be aware of:
 
 ### Installing
 
-If you wish to install Plasma, you can specify the target install path with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To install to the directory `/opt/plasma`, follow these steps:
+If you wish to install Plasma, you can specify the target install path
+with `CMAKE_INSTALL_PREFIX`, as well as `CMAKE_INSTALL_LIBDIR`. To
+install to the directory `/opt/plasma`, follow these steps:
 
 ```
 cd build
